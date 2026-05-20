@@ -1,6 +1,6 @@
 // STrade Service Worker — Cache-First Strategy
 // Bump version to invalidate old cache on updates
-const CACHE_NAME = 'strade-v6.0';
+const CACHE_NAME = 'strade-v6.1';
 const ASSETS = [
   './',
   './index.html',
