@@ -1,0 +1,2599 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="STrade" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="description" content="STrade — verified trading & echter Fortschritt. Performance-Cockpit für TR, Scalable und IBKR." />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
+<title>STrade — Trade fair. Sieh deinen echten Fortschritt.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root[data-theme="dark"] {
+    --bg: #0a0a0a;
+    --surface: #131313;
+    --surface-2: #1a1a1a;
+    --surface-3: #222222;
+    --surface-4: #2a2a2a;
+    --border: #262626;
+    --border-strong: #3a3a3a;
+    --text: #fafaf9;
+    --text-muted: #a3a3a3;
+    --text-dim: #57534e;
+    --pos: #34d399;
+    --pos-soft: rgba(52, 211, 153, 0.12);
+    --pos-strong: rgba(52, 211, 153, 0.2);
+    --neg: #f87171;
+    --neg-soft: rgba(248, 113, 113, 0.12);
+    --info: #60a5fa;
+    --info-soft: rgba(96, 165, 250, 0.12);
+    --warn: #fbbf24;
+    --warn-soft: rgba(251, 191, 36, 0.12);
+    --accent: #d4a373;
+    --accent-soft: rgba(212, 163, 115, 0.12);
+    --purple: #a78bfa;
+    --purple-soft: rgba(167, 139, 250, 0.12);
+    --brand: #14b8a6;
+    --brand-soft: rgba(20, 184, 166, 0.14);
+    --brand-strong: #0d9488;
+    --brand-hover: #2dd4bf;
+    --brand-on: #042f2e;
+  }
+  :root[data-theme="light"] {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --surface-2: #f5f5f4;
+    --surface-3: #ececea;
+    --surface-4: #e0ddda;
+    --border: #e7e5e4;
+    --border-strong: #d6d3d1;
+    --text: #1c1917;
+    --text-muted: #57534e;
+    --text-dim: #a8a29e;
+    --pos: #047857;
+    --pos-soft: rgba(4, 120, 87, 0.08);
+    --pos-strong: rgba(4, 120, 87, 0.15);
+    --neg: #b91c1c;
+    --neg-soft: rgba(185, 28, 28, 0.08);
+    --info: #0369a1;
+    --info-soft: rgba(3, 105, 161, 0.08);
+    --warn: #b45309;
+    --warn-soft: rgba(180, 83, 9, 0.1);
+    --accent: #92400e;
+    --accent-soft: rgba(146, 64, 14, 0.08);
+    --purple: #6d28d9;
+    --purple-soft: rgba(109, 40, 217, 0.08);
+    --brand: #0d9488;
+    --brand-soft: rgba(13, 148, 136, 0.10);
+    --brand-strong: #0f766e;
+    --brand-hover: #115e59;
+    --brand-on: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: 'Geist', sans-serif; font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  body { min-height: 100vh; overflow-x: hidden; }
+  body.modal-open { overflow: hidden; }
+  .mono { font-family: 'Geist Mono', monospace; font-feature-settings: 'tnum' 1; }
+  .serif { font-family: 'Instrument Serif', serif; }
+  button { font-family: inherit; cursor: pointer; }
+  a { color: inherit; text-decoration: none; }
+  input, select, textarea { font-family: inherit; }
+
+  .app { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  header { position: sticky; top: 0; background: rgba(10,10,10,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 50; }
+  :root[data-theme="light"] header { background: rgba(250,250,249,0.85); }
+  .header-inner { display: flex; align-items: center; gap: 24px; height: 56px; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .logo { display: flex; align-items: center; gap: 9px; cursor: pointer; flex-shrink: 0; color: var(--text); transition: opacity 0.15s; }
+  .logo:hover { opacity: 0.8; }
+  .logo-mark { width: 26px; height: 26px; flex-shrink: 0; }
+  .logo-text { font-family: 'Geist', sans-serif; font-size: 17px; font-weight: 500; letter-spacing: -0.02em; color: var(--text); }
+  .logo-s { font-weight: 600; }
+
+  nav.primary { display: flex; gap: 4px; flex: 1; }
+  .nav-link { padding: 6px 12px; border-radius: 6px; font-size: 13px; color: var(--text-muted); cursor: pointer; transition: all 0.15s; user-select: none; border: none; background: transparent; }
+  .nav-link:hover { color: var(--text); background: var(--surface-2); }
+  .nav-link.active { color: var(--text); background: var(--surface-3); font-weight: 500; }
+
+  .search-box { display: flex; align-items: center; gap: 8px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; min-width: 240px; transition: border 0.15s; position: relative; }
+  .search-box:focus-within { border-color: var(--border-strong); }
+  .search-box svg { width: 14px; height: 14px; color: var(--text-dim); flex-shrink: 0; }
+  .search-box input { background: transparent; border: none; outline: none; color: var(--text); font-size: 13px; flex: 1; }
+  .search-box input::placeholder { color: var(--text-dim); }
+  .kbd { font-family: 'Geist Mono'; font-size: 10px; padding: 2px 5px; border: 1px solid var(--border); border-radius: 3px; color: var(--text-dim); }
+
+  .search-results { position: absolute; top: 110%; left: 0; right: 0; background: var(--surface); border: 1px solid var(--border-strong); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); padding: 6px; max-height: 360px; overflow-y: auto; z-index: 60; display: none; }
+  .search-results.visible { display: block; }
+  .search-result { padding: 10px 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.1s; }
+  .search-result:hover, .search-result.highlighted { background: var(--surface-2); }
+  .sr-icon { width: 28px; height: 28px; border-radius: 50%; background: var(--surface-3); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+  .sr-text { flex: 1; min-width: 0; }
+  .sr-name { font-size: 13px; font-weight: 500; }
+  .sr-meta { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .sr-empty { padding: 20px; font-size: 12px; color: var(--text-muted); text-align: center; }
+
+  .icon-btn { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: none; background: transparent; border-radius: 8px; color: var(--text-muted); transition: all 0.15s; position: relative; flex-shrink: 0; }
+  .icon-btn:hover { background: var(--surface-2); color: var(--text); }
+  .icon-btn svg { width: 16px; height: 16px; }
+  .notif-dot { position: absolute; top: 7px; right: 7px; width: 7px; height: 7px; background: var(--neg); border-radius: 50%; border: 2px solid var(--bg); }
+
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--surface-3); color: var(--text); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; cursor: pointer; flex-shrink: 0; }
+
+  /* Notif dropdown */
+  .notif-dropdown { position: absolute; top: 110%; right: 0; background: var(--surface); border: 1px solid var(--border-strong); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); width: 320px; padding: 6px; z-index: 60; display: none; }
+  .notif-dropdown.visible { display: block; }
+  .notif-header { padding: 10px 12px; font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+  .notif-item { padding: 10px 12px; border-radius: 6px; cursor: pointer; display: flex; gap: 10px; align-items: flex-start; transition: background 0.1s; }
+  .notif-item:hover { background: var(--surface-2); }
+  .notif-item .ni-text { flex: 1; font-size: 12px; line-height: 1.5; }
+  .notif-item .ni-time { color: var(--text-dim); font-size: 11px; margin-top: 2px; font-family: 'Geist Mono'; }
+  .notif-item .ni-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px; }
+
+  /* Main */
+  main { padding: 28px 0 80px; }
+  .view { display: none; }
+  .view.active { display: block; animation: fadeUp 0.25s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Demo banner */
+  .demo-banner { background: var(--warn-soft); border: 1px solid transparent; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--warn); display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+  .demo-banner svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* Profile hero */
+  .profile-hero { display: grid; grid-template-columns: 88px 1fr auto; gap: 20px; align-items: flex-start; margin-bottom: 24px; }
+  .avatar-lg { width: 88px; height: 88px; border-radius: 50%; background: linear-gradient(135deg, var(--surface-3), var(--surface-2)); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 500; letter-spacing: -0.02em; position: relative; }
+  .avatar-streak { position: absolute; bottom: -4px; right: -4px; background: linear-gradient(135deg, #f97316, #fbbf24); color: #fff; border: 2px solid var(--bg); border-radius: 999px; font-size: 10px; font-weight: 600; padding: 2px 8px; display: flex; align-items: center; gap: 3px; font-family: 'Geist Mono'; }
+  .avatar-streak svg { width: 9px; height: 9px; }
+
+  .name-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+  .display-name { font-size: 24px; font-weight: 500; letter-spacing: -0.02em; }
+  .level-badge { display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, var(--purple-soft), var(--info-soft)); color: var(--purple); font-size: 11px; padding: 3px 8px; border-radius: 999px; font-weight: 600; cursor: help; border: 1px solid var(--purple-soft); }
+  .verified-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--pos-soft); color: var(--pos); font-size: 11px; padding: 3px 8px; border-radius: 999px; font-weight: 500; cursor: help; }
+  .verified-badge svg { width: 11px; height: 11px; }
+  .tier-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--info-soft); color: var(--info); font-size: 11px; padding: 3px 8px; border-radius: 999px; font-weight: 500; cursor: help; }
+  .bio { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; max-width: 540px; }
+  .stats-row { display: flex; gap: 22px; font-size: 13px; flex-wrap: wrap; }
+  .stats-row > span { color: var(--text-muted); }
+  .stats-row strong { color: var(--text); font-weight: 500; }
+
+  .actions-row { display: flex; gap: 8px; }
+  .btn { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; transition: all 0.15s; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); display: inline-flex; align-items: center; gap: 6px; }
+  .btn:hover { background: var(--surface-3); }
+  .btn-primary { background: var(--brand); color: var(--brand-on); border-color: var(--brand); }
+  .btn-primary:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
+  .btn-primary.following { background: var(--brand-soft); color: var(--brand); border-color: transparent; }
+  .btn-icon-only { width: 38px; height: 38px; padding: 0; display: flex; align-items: center; justify-content: center; }
+  .btn-large { padding: 12px 24px; font-size: 14px; }
+
+  /* Sub-tabs */
+  .subtabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 22px; overflow-x: auto; }
+  .subtab { padding: 12px 16px; font-size: 13px; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; white-space: nowrap; border-top: none; border-left: none; border-right: none; background: transparent; }
+  .subtab:hover { color: var(--text); }
+  .subtab.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
+  .subtab-count { color: var(--text-dim); font-size: 11px; margin-left: 4px; }
+
+  .subview { display: none; }
+  .subview.active { display: block; }
+
+  /* Health Score / AI Insight */
+  .health-card { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; }
+  .health-left { display: flex; flex-direction: column; }
+  .health-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
+  .health-info { display: inline-flex; width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--border-strong); align-items: center; justify-content: center; font-size: 9px; font-style: italic; color: var(--text-muted); cursor: help; }
+  .health-score-row { display: grid; grid-template-columns: 120px 1fr; gap: 18px; align-items: center; flex: 1; }
+  .health-ring { width: 120px; height: 120px; flex-shrink: 0; }
+  .health-breakdown { display: flex; flex-direction: column; gap: 10px; }
+  .hb-row { display: grid; grid-template-columns: 110px 1fr 32px; gap: 10px; align-items: center; }
+  .hb-label { font-size: 11px; color: var(--text-muted); }
+  .hb-bar { height: 4px; background: var(--surface-3); border-radius: 2px; overflow: hidden; }
+  .hb-fill { height: 100%; border-radius: 2px; transition: width 0.4s; }
+  .hb-val { font-size: 12px; font-weight: 500; text-align: right; }
+  .health-right { background: linear-gradient(135deg, var(--purple-soft), var(--info-soft)); border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; }
+  .ai-insight { display: flex; flex-direction: column; gap: 8px; }
+  .ai-header { font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 6px; color: var(--purple); margin-bottom: 4px; }
+  .ai-icon { font-size: 14px; }
+  .ai-body { font-size: 12.5px; line-height: 1.6; color: var(--text); margin: 0; }
+  .ai-body strong { color: var(--text); font-weight: 600; }
+  .ai-footer { font-size: 10px; color: var(--text-dim); margin-top: auto; padding-top: 8px; font-family: 'Geist Mono'; }
+  .trend-strip { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .trend-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .trend-spark { width: 100%; height: 32px; display: block; }
+  .trend-stats { font-size: 11px; font-family: 'Geist Mono'; display: flex; justify-content: space-between; margin-top: 6px; color: var(--text-muted); }
+  .trend-stats > span:first-child { color: var(--text); }
+  .trend-stable { color: var(--text-dim); }
+
+  @media (max-width: 900px) {
+    .health-card { grid-template-columns: 1fr; }
+    .health-score-row { grid-template-columns: 100px 1fr; }
+    .health-ring { width: 100px; height: 100px; }
+    .hb-row { grid-template-columns: 90px 1fr 28px; gap: 8px; }
+  }
+
+  /* KPI grid */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; transition: border 0.15s; cursor: help; }
+  .kpi:hover { border-color: var(--border-strong); }
+  .kpi-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
+  .kpi-label svg { width: 11px; height: 11px; opacity: 0.6; }
+  .kpi-value { font-family: 'Geist Mono'; font-size: 24px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; }
+  .kpi-meta { font-size: 11px; color: var(--text-dim); margin-top: 6px; font-family: 'Geist Mono'; }
+  .pos { color: var(--pos); }
+  .neg { color: var(--neg); }
+
+  /* Chart card */
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 16px; }
+  .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+  .chart-title-row { display: flex; align-items: center; gap: 12px; }
+  .chart-title { font-size: 14px; font-weight: 500; }
+  .bench-select { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; cursor: pointer; transition: all 0.15s; position: relative; }
+  .bench-select:hover { border-color: var(--border-strong); color: var(--text); }
+  .bench-dropdown { position: absolute; top: 110%; left: 0; background: var(--surface); border: 1px solid var(--border-strong); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); padding: 4px; min-width: 140px; z-index: 30; display: none; }
+  .bench-dropdown.visible { display: block; }
+  .bench-option { padding: 7px 10px; border-radius: 5px; font-size: 12px; cursor: pointer; }
+  .bench-option:hover { background: var(--surface-2); }
+  .bench-option.active { background: var(--surface-3); font-weight: 500; }
+
+  .range-buttons { display: flex; gap: 2px; background: var(--surface-2); padding: 3px; border-radius: 8px; }
+  .range-btn { padding: 4px 10px; border-radius: 5px; font-size: 11px; color: var(--text-muted); cursor: pointer; transition: all 0.15s; user-select: none; font-family: 'Geist Mono'; font-weight: 500; border: none; background: transparent; }
+  .range-btn:hover { color: var(--text); }
+  .range-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+
+  .chart-area { position: relative; }
+  .chart-area svg { width: 100%; height: auto; display: block; }
+  .chart-tooltip { position: absolute; pointer-events: none; background: var(--surface-3); border: 1px solid var(--border-strong); border-radius: 6px; padding: 8px 10px; font-size: 11px; opacity: 0; transition: opacity 0.1s; transform: translate(-50%, -100%); margin-top: -8px; white-space: nowrap; font-family: 'Geist Mono'; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  .chart-tooltip.visible { opacity: 1; }
+  .chart-tooltip .tt-date { color: var(--text-muted); margin-bottom: 4px; }
+  .chart-tooltip .tt-row { display: flex; align-items: center; gap: 6px; }
+  .chart-tooltip .tt-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  .chart-legend { display: flex; gap: 18px; margin-top: 8px; font-size: 11px; flex-wrap: wrap; }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); }
+  .legend-item .swatch { width: 14px; height: 2px; }
+
+  /* Two-col / three-col layouts */
+  .two-col { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+  .card-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .card-subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; }
+
+  /* Trade list */
+  .trade { padding: 12px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .trade:last-of-type { border-bottom: none; }
+  .trade-main { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .trade-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+  .setup-tag { font-size: 10px; font-family: 'Geist Mono'; padding: 2px 6px; border-radius: 4px; background: var(--surface-3); color: var(--text-muted); flex-shrink: 0; font-weight: 500; }
+  .ticker { font-size: 13px; font-weight: 500; }
+  .trade-meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; font-family: 'Geist Mono'; }
+  .trade-right { text-align: right; display: flex; align-items: center; gap: 8px; }
+  .trade-pct { font-size: 13px; font-weight: 500; font-family: 'Geist Mono'; }
+  .trade-detail { display: none; margin-top: 14px; padding: 14px; background: var(--surface-2); border-radius: 8px; font-size: 12px; }
+  .trade.open .trade-detail { display: block; }
+  .trade.open .expand-icon { transform: rotate(180deg); }
+  .expand-icon { width: 14px; height: 14px; color: var(--text-dim); transition: transform 0.2s; }
+  .trade-journal { display: grid; grid-template-columns: 80px 1fr; gap: 6px 12px; align-items: start; }
+  .journal-label { color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 1px; }
+  .journal-value { color: var(--text); line-height: 1.55; }
+
+  /* Allocation donut */
+  .allocation-grid { display: grid; grid-template-columns: 130px 1fr; gap: 16px; align-items: center; }
+  .donut-svg { width: 130px; height: 130px; }
+  .alloc-list { font-size: 12px; }
+  .alloc-row { display: flex; align-items: center; justify-content: space-between; padding: 4px 0; }
+  .alloc-left { display: flex; align-items: center; gap: 8px; }
+  .alloc-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+  .alloc-pct { font-family: 'Geist Mono'; color: var(--text-muted); }
+
+  /* Tags */
+  .tags-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+  .tag { font-size: 11px; padding: 5px 12px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .tag:hover { border-color: var(--border-strong); color: var(--text); }
+  .tag-strategy { background: var(--info-soft); color: var(--info); border-color: transparent; }
+  .tag-setup { background: var(--surface-3); border-color: transparent; }
+
+  /* Achievements / Badges */
+  .achievements-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-top: 14px; }
+  .badge-item { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 10px; text-align: center; transition: all 0.15s; cursor: help; }
+  .badge-item:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+  .badge-item.locked { opacity: 0.4; }
+  .badge-icon { font-size: 22px; margin-bottom: 6px; }
+  .badge-name { font-size: 11px; font-weight: 500; margin-bottom: 2px; }
+  .badge-desc { font-size: 10px; color: var(--text-muted); line-height: 1.4; }
+
+  /* Trades table */
+  .trade-table { width: 100%; font-size: 12px; border-collapse: collapse; }
+  .trade-table th { text-align: left; padding: 10px 8px; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+  .trade-table th:hover { color: var(--text); }
+  .trade-table th.right, .trade-table td.right { text-align: right; }
+  .trade-table th.sorted::after { content: ' ↓'; color: var(--text); }
+  .trade-table th.sorted.asc::after { content: ' ↑'; }
+  .trade-table td { padding: 12px 8px; border-bottom: 1px solid var(--border); }
+  .trade-table tr:hover { background: var(--surface-2); }
+  .r-mult { font-family: 'Geist Mono'; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+  .r-pos { background: var(--pos-soft); color: var(--pos); }
+  .r-neg { background: var(--neg-soft); color: var(--neg); }
+
+  /* Stats */
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .calendar { display: grid; grid-template-columns: 32px repeat(12, 1fr); gap: 4px; font-size: 10px; font-family: 'Geist Mono'; }
+  .cal-cell { aspect-ratio: 1; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 500; cursor: help; }
+  .cal-label { color: var(--text-dim); display: flex; align-items: center; justify-content: flex-end; padding-right: 4px; }
+  .cal-month { color: var(--text-dim); text-align: center; padding: 4px 0; }
+  .histogram { height: 180px; display: flex; align-items: flex-end; gap: 4px; padding-top: 16px; }
+  .bar { flex: 1; background: var(--surface-3); border-radius: 3px 3px 0 0; position: relative; transition: opacity 0.15s; cursor: help; }
+  .bar.pos { background: var(--pos); }
+  .bar.neg { background: var(--neg); }
+  .bar:hover { opacity: 0.8; }
+  .bar-label { position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 9px; color: var(--text-dim); font-family: 'Geist Mono'; }
+
+  /* Feed */
+  .feed-layout { display: grid; grid-template-columns: 1fr 280px; gap: 24px; }
+  .feed-filters { display: flex; gap: 8px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .feed-filter { padding: 6px 12px; border-radius: 6px; font-size: 12px; color: var(--text-muted); cursor: pointer; transition: all 0.15s; user-select: none; border: none; background: transparent; }
+  .feed-filter:hover { color: var(--text); background: var(--surface-2); }
+  .feed-filter.active { background: var(--surface-2); color: var(--text); font-weight: 500; }
+
+  .post { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 12px; transition: border 0.15s; }
+  .post:hover { border-color: var(--border-strong); }
+  .post-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .avatar-md { width: 40px; height: 40px; border-radius: 50%; background: var(--surface-3); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; flex-shrink: 0; }
+  .post-meta { flex: 1; min-width: 0; }
+  .post-author { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; flex-wrap: wrap; }
+  .post-author .verified-badge { padding: 2px 6px; }
+  .post-action { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .post-time { font-size: 11px; color: var(--text-dim); margin-top: 2px; font-family: 'Geist Mono'; }
+  .post-body { font-size: 13px; line-height: 1.6; color: var(--text); margin-bottom: 12px; }
+  .post-trade-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .post-trade-info { font-size: 12px; }
+  .post-trade-stats { display: flex; gap: 14px; margin-top: 4px; color: var(--text-muted); font-family: 'Geist Mono'; font-size: 11px; }
+  .post-trade-pct { font-family: 'Geist Mono'; font-size: 18px; font-weight: 500; }
+  .post-actions { display: flex; gap: 4px; padding-top: 8px; border-top: 1px solid var(--border); margin-top: 4px; }
+  .post-action-btn { background: none; border: none; color: var(--text-muted); padding: 6px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; transition: all 0.15s; font-family: inherit; }
+  .post-action-btn:hover { background: var(--surface-2); color: var(--text); }
+  .post-action-btn.liked { color: var(--neg); }
+  .post-action-btn.bookmarked { color: var(--info); }
+  .post-action-btn svg { width: 14px; height: 14px; }
+
+  .comments { display: none; padding-top: 12px; border-top: 1px solid var(--border); margin-top: 6px; }
+  .comments.open { display: block; }
+  .comment { display: flex; gap: 10px; padding: 8px 0; }
+  .comment .avatar-md { width: 28px; height: 28px; font-size: 11px; }
+  .comment-body { flex: 1; font-size: 12px; line-height: 1.55; background: var(--surface-2); padding: 8px 10px; border-radius: 8px; }
+  .comment-author { font-weight: 500; margin-right: 6px; }
+  .comment-time { color: var(--text-dim); font-size: 10px; font-family: 'Geist Mono'; margin-top: 2px; }
+  .comment-input { display: flex; gap: 8px; margin-top: 8px; }
+  .comment-input input { flex: 1; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: var(--text); font-size: 12px; outline: none; }
+  .comment-input input:focus { border-color: var(--border-strong); }
+  .comment-input button { padding: 6px 14px; font-size: 12px; }
+
+  /* === STRAVA-STYLE FEED HERO === */
+  .feed-hero { background: linear-gradient(135deg, rgba(249,115,22,0.10), rgba(251,191,36,0.06) 60%, var(--surface)); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; margin-bottom: 16px; display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; }
+  .fh-streak { display: flex; align-items: center; gap: 12px; }
+  .fh-flame { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #f97316, #fbbf24); display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; box-shadow: 0 2px 8px rgba(249,115,22,0.3); }
+  .fh-flame svg { width: 22px; height: 22px; }
+  .fh-streak-num { font-family: 'Geist Mono'; font-size: 22px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
+  .fh-streak-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .fh-prompt { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; padding-left: 18px; border-left: 1px solid var(--border); }
+  .fh-prompt-text { font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+  .fh-prompt-text strong { color: var(--text); font-weight: 500; display: block; margin-bottom: 2px; }
+
+  /* === ACTIVITY CARD (Strava-style) === */
+  .activity { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px 14px; margin-bottom: 12px; transition: border 0.15s; }
+  .activity:hover { border-color: var(--border-strong); }
+  .activity-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .activity-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; flex-shrink: 0; position: relative; }
+  .activity-streak-badge { position: absolute; bottom: -3px; right: -3px; background: linear-gradient(135deg, #f97316, #fbbf24); color: #fff; border: 2px solid var(--surface); border-radius: 999px; font-size: 8px; font-weight: 600; padding: 1px 5px; font-family: 'Geist Mono'; }
+  .activity-meta { flex: 1; min-width: 0; }
+  .activity-author { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; flex-wrap: wrap; }
+  .activity-action { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .activity-time { font-size: 11px; color: var(--text-dim); margin-top: 2px; font-family: 'Geist Mono'; }
+
+  .activity-body { font-size: 13px; line-height: 1.55; color: var(--text); margin-bottom: 12px; }
+
+  .activity-trade { background: var(--surface-2); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
+  .at-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; gap: 12px; }
+  .at-ticker { font-size: 14px; font-weight: 600; }
+  .at-strat { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .at-pct { font-family: 'Geist Mono'; font-size: 22px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
+  .at-chart { width: 100%; height: 56px; display: block; margin: 8px 0 12px; }
+  .at-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .at-stat { font-size: 10px; color: var(--text-muted); text-align: center; }
+  .at-stat-label { text-transform: uppercase; letter-spacing: 0.04em; }
+  .at-stat-val { font-family: 'Geist Mono'; font-size: 13px; font-weight: 500; color: var(--text); margin-top: 2px; }
+
+  .achievement-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .ach-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 3px 9px; border-radius: 999px; font-weight: 500; font-family: 'Geist'; }
+  .ach-pill.discipline { background: var(--pos-soft); color: var(--pos); }
+  .ach-pill.streak { background: linear-gradient(135deg, rgba(249,115,22,0.15), rgba(251,191,36,0.1)); color: #f97316; }
+  .ach-pill.peer { background: var(--info-soft); color: var(--info); }
+  .ach-pill.badge { background: var(--purple-soft); color: var(--purple); }
+  .ach-pill.r-mult { background: var(--surface-3); color: var(--text); font-family: 'Geist Mono'; }
+
+  .activity-actions { display: flex; gap: 4px; padding-top: 8px; border-top: 1px solid var(--border); align-items: center; }
+  .kudos-btn { background: none; border: none; color: var(--text-muted); padding: 6px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; transition: all 0.15s; font-family: inherit; cursor: pointer; }
+  .kudos-btn:hover { background: var(--surface-2); color: var(--text); }
+  .kudos-btn.given { color: var(--pos); }
+  .kudos-btn.given svg { fill: currentColor; }
+  .kudos-btn svg { width: 14px; height: 14px; }
+  .kudos-stack { display: flex; align-items: center; padding: 6px 8px; font-size: 11px; color: var(--text-muted); margin-left: auto; }
+  .kudos-avatars { display: flex; margin-right: 8px; }
+  .kudos-avatars .ka { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--surface); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; margin-left: -6px; }
+  .kudos-avatars .ka:first-child { margin-left: 0; }
+
+  /* === SYSTEM POSTS === */
+  .system-post { border-radius: 12px; padding: 18px 20px; margin-bottom: 12px; border: 1px solid var(--border); }
+  .system-post.achievement { background: linear-gradient(135deg, rgba(167,139,250,0.10), rgba(96,165,250,0.06)); border-color: transparent; }
+  .system-post.recap { background: var(--surface); }
+  .system-post.compare { background: linear-gradient(135deg, var(--info-soft), rgba(96,165,250,0.04)); border-color: transparent; }
+
+  .sp-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .sp-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .sp-title { font-size: 13px; font-weight: 600; }
+  .sp-subtitle { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+  .sp-recap-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0; padding: 14px; background: var(--surface-2); border-radius: 8px; }
+  .sp-stat { font-size: 11px; }
+  .sp-stat-label { color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; font-size: 10px; }
+  .sp-stat-val { font-family: 'Geist Mono'; font-size: 16px; font-weight: 600; margin-top: 2px; }
+  .sp-recap-insight { font-size: 12px; color: var(--text-muted); line-height: 1.55; padding: 10px 12px; background: var(--purple-soft); border-radius: 6px; }
+  .sp-recap-insight strong { color: var(--text); }
+
+  .sp-compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+  .sp-compare-cell { padding: 12px; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); }
+  .sp-compare-cell.you { border-color: var(--pos); }
+  .sp-cc-name { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+  .sp-cc-val { font-family: 'Geist Mono'; font-size: 20px; font-weight: 600; }
+  .sp-cc-meta { font-size: 10px; color: var(--text-dim); margin-top: 2px; font-family: 'Geist Mono'; }
+
+  /* === SIDEBAR: rank + challenges === */
+  .rank-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .rank-pos { display: flex; align-items: baseline; gap: 4px; }
+  .rank-num { font-family: 'Geist Mono'; font-size: 28px; font-weight: 600; letter-spacing: -0.02em; }
+  .rank-of { font-size: 12px; color: var(--text-muted); }
+  .rank-arrow { font-size: 12px; color: var(--pos); display: inline-flex; align-items: center; gap: 3px; font-family: 'Geist Mono'; font-weight: 500; }
+  .rank-bar { height: 6px; background: var(--surface-2); border-radius: 999px; overflow: hidden; margin-bottom: 6px; }
+  .rank-fill { height: 100%; background: linear-gradient(90deg, var(--brand), var(--brand-hover)); border-radius: 999px; }
+  .rank-meta { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+  .rank-spark svg { width: 100%; height: 32px; display: block; }
+
+  .challenge { padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .challenge:last-child { border-bottom: none; padding-bottom: 0; }
+  .challenge:first-child { padding-top: 0; }
+  .ch-header { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; }
+  .ch-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .ch-text { flex: 1; min-width: 0; }
+  .ch-name { font-size: 12px; font-weight: 500; }
+  .ch-desc { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .ch-progress { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
+  .ch-bar { height: 4px; background: var(--surface-3); border-radius: 999px; overflow: hidden; }
+  .ch-fill { height: 100%; border-radius: 999px; transition: width 0.4s; }
+  .ch-count { font-size: 10px; color: var(--text-muted); font-family: 'Geist Mono'; font-weight: 500; }
+
+  /* === ACTIVITY MOBILE === */
+  @media (max-width: 900px) {
+    .feed-hero { grid-template-columns: 1fr; padding: 16px; gap: 14px; }
+    .fh-prompt { padding-left: 0; padding-top: 12px; border-left: none; border-top: 1px solid var(--border); grid-template-columns: 1fr; gap: 10px; }
+    .at-stats { grid-template-columns: repeat(2, 1fr); gap: 8px 12px; }
+    .sp-compare-row { grid-template-columns: 1fr; }
+    .sp-recap-stats { grid-template-columns: repeat(2, 1fr); gap: 12px 16px; }
+  }
+
+  /* Sidebar */
+  .sidebar-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+  .sidebar-title { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 12px; }
+  .trending-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: padding-left 0.15s; }
+  .trending-item:hover { padding-left: 4px; }
+  .trending-item:last-child { border-bottom: none; }
+  .trending-name { font-size: 12px; font-weight: 500; }
+  .trending-meta { font-size: 11px; color: var(--text-muted); margin-top: 1px; font-family: 'Geist Mono'; }
+  .trending-pct { font-size: 12px; font-family: 'Geist Mono'; font-weight: 500; }
+  .suggested-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; }
+  .suggested-info { flex: 1; min-width: 0; }
+  .suggested-name { font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+  .suggested-meta { font-size: 11px; color: var(--text-muted); font-family: 'Geist Mono'; }
+  .btn-sm { padding: 4px 10px; font-size: 11px; border-radius: 6px; }
+
+  /* Discover */
+  .discover-controls { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; gap: 16px; flex-wrap: wrap; }
+  .filter-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { padding: 6px 14px; border-radius: 999px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); font-size: 12px; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .chip:hover { color: var(--text); border-color: var(--border-strong); }
+  .chip.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  .sort-select-wrap { position: relative; }
+  .sort-select { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+  .sort-select:hover { border-color: var(--border-strong); }
+  .sort-dropdown { position: absolute; top: 110%; right: 0; background: var(--surface); border: 1px solid var(--border-strong); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); padding: 4px; min-width: 200px; z-index: 30; display: none; }
+  .sort-dropdown.visible { display: block; }
+  .sort-option { padding: 8px 12px; border-radius: 5px; font-size: 12px; cursor: pointer; }
+  .sort-option:hover { background: var(--surface-2); }
+  .sort-option.active { background: var(--surface-3); font-weight: 500; }
+
+  .discover-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .trader-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; transition: all 0.2s; }
+  .trader-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+  .trader-card.hidden { display: none; }
+  .trader-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .trader-info { flex: 1; min-width: 0; }
+  .trader-name { display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 500; }
+  .trader-bio { font-size: 11px; color: var(--text-muted); margin-top: 2px; font-family: 'Geist Mono'; }
+  .trader-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; padding: 12px; background: var(--surface-2); border-radius: 8px; }
+  .stat-mini { font-size: 10px; }
+  .stat-mini-label { color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-mini-value { font-family: 'Geist Mono'; font-size: 14px; font-weight: 500; margin-top: 2px; }
+  .trader-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .trader-tag { font-size: 10px; padding: 2px 7px; border-radius: 999px; background: var(--surface-2); color: var(--text-muted); }
+
+  /* Tooltip */
+  .tooltip-content { display: none; position: absolute; background: var(--surface-3); border: 1px solid var(--border-strong); border-radius: 8px; padding: 12px 14px; font-size: 12px; line-height: 1.5; max-width: 280px; z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .tooltip-content.visible { display: block; }
+  .tooltip-content .tt-row { display: flex; align-items: center; gap: 6px; padding: 3px 0; color: var(--text-muted); }
+  .tooltip-content .tt-row svg { width: 12px; height: 12px; color: var(--pos); flex-shrink: 0; }
+  .tooltip-content .tt-row strong { color: var(--text); font-weight: 500; }
+
+  /* === VORSORGE VIEW (AVRG) === */
+  .vorsorge-hero { background: linear-gradient(135deg, var(--info-soft), var(--purple-soft)); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 22px; display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; }
+  .vorsorge-hero h2 { font-family: 'Instrument Serif'; font-style: italic; font-size: 28px; font-weight: 400; letter-spacing: -0.02em; margin-bottom: 6px; }
+  .vorsorge-hero p { font-size: 13px; color: var(--text-muted); max-width: 520px; line-height: 1.55; }
+  .vorsorge-badge { font-size: 11px; padding: 4px 10px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border-strong); color: var(--text); font-family: 'Geist Mono'; font-weight: 500; display: inline-block; margin-bottom: 8px; }
+
+  .vorsorge-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+  .vorsorge-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+  .vorsorge-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+  .vorsorge-card .vc-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 12px; }
+  .vorsorge-card .vc-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .vorsorge-card .vc-desc { font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+  .vorsorge-card .vc-stat { font-family: 'Geist Mono'; font-size: 22px; font-weight: 500; margin-top: 12px; }
+
+  .calc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+  .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
+  .calc-inputs { display: flex; flex-direction: column; gap: 14px; }
+  .calc-input-row { display: flex; flex-direction: column; gap: 6px; }
+  .calc-input-row label { font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; }
+  .calc-input-row label .hint { font-family: 'Geist Mono'; font-size: 11px; color: var(--text); font-weight: 500; }
+  .calc-input-row input[type="range"] { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; background: var(--surface-3); border-radius: 4px; outline: none; }
+  .calc-input-row input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: var(--text); border-radius: 50%; cursor: pointer; transition: transform 0.1s; }
+  .calc-input-row input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+  .calc-input-row input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: var(--text); border-radius: 50%; cursor: pointer; border: none; }
+  .calc-input-row select { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; color: var(--text); font-size: 13px; outline: none; cursor: pointer; }
+  .calc-input-row select:focus { border-color: var(--border-strong); }
+
+  .calc-results { background: var(--surface-2); border-radius: 10px; padding: 18px; display: flex; flex-direction: column; }
+  .calc-result-main { font-family: 'Geist Mono'; font-size: 32px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; margin-bottom: 4px; color: var(--pos); }
+  .calc-result-label { font-size: 12px; color: var(--text-muted); margin-bottom: 18px; }
+  .calc-breakdown { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; font-size: 12px; }
+  .calc-breakdown .cb-label { color: var(--text-muted); }
+  .calc-breakdown .cb-value { font-family: 'Geist Mono'; }
+
+  .calc-chart { margin-top: auto; padding-top: 16px; }
+
+  /* AVRG comparison table */
+  .avrg-compare { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px; margin-bottom: 16px; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 14px; }
+  .compare-table th { text-align: left; padding: 10px 12px; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+  .compare-table td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table .col-old { color: var(--text-muted); }
+  .compare-table .col-new { color: var(--text); }
+  .compare-icon { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; }
+  .compare-icon.new::before { content: 'NEU'; background: var(--pos-soft); color: var(--pos); padding: 2px 6px; border-radius: 4px; font-size: 9px; font-family: 'Geist Mono'; font-weight: 600; }
+
+  /* === PRICING VIEW === */
+  .pricing-hero { text-align: center; padding: 24px 0 32px; }
+  .pricing-hero h2 { font-family: 'Instrument Serif'; font-style: italic; font-size: 36px; font-weight: 400; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .pricing-hero p { font-size: 14px; color: var(--text-muted); max-width: 540px; margin: 0 auto; line-height: 1.6; }
+
+  .billing-toggle { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); padding: 4px; border-radius: 999px; margin-top: 22px; }
+  .billing-btn { padding: 8px 18px; border-radius: 999px; font-size: 12px; color: var(--text-muted); cursor: pointer; transition: all 0.15s; user-select: none; border: none; background: transparent; font-weight: 500; }
+  .billing-btn.active { background: var(--text); color: var(--bg); }
+  .billing-saving { font-size: 10px; padding: 2px 6px; border-radius: 999px; background: var(--pos-soft); color: var(--pos); margin-left: 6px; font-weight: 600; }
+
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 22px; }
+  .pricing-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px 24px; display: flex; flex-direction: column; position: relative; }
+  .pricing-card.featured { border-color: var(--text); border-width: 2px; }
+  .pricing-popular { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--text); color: var(--bg); font-size: 10px; font-weight: 600; padding: 4px 10px; border-radius: 999px; font-family: 'Geist Mono'; letter-spacing: 0.05em; }
+  .pc-name { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .pc-tagline { font-size: 12px; color: var(--text-muted); margin-bottom: 22px; min-height: 32px; }
+  .pc-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; }
+  .pc-amount { font-family: 'Geist Mono'; font-size: 38px; font-weight: 600; letter-spacing: -0.02em; }
+  .pc-currency { font-size: 22px; font-weight: 600; color: var(--text-muted); }
+  .pc-period { font-size: 12px; color: var(--text-muted); margin-left: 4px; }
+  .pc-billed { font-size: 11px; color: var(--text-dim); margin-bottom: 22px; min-height: 16px; font-family: 'Geist Mono'; }
+  .pc-cta { width: 100%; margin-bottom: 22px; justify-content: center; }
+  .pc-features { font-size: 13px; line-height: 1.7; flex: 1; }
+  .pc-feature { display: flex; align-items: flex-start; gap: 8px; padding: 4px 0; }
+  .pc-feature svg { width: 14px; height: 14px; color: var(--pos); flex-shrink: 0; margin-top: 4px; }
+  .pc-feature.muted { color: var(--text-muted); }
+  .pc-feature.muted svg { color: var(--text-dim); }
+  .pc-section { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 12px; margin-bottom: 4px; font-weight: 500; }
+
+  .creator-program { background: linear-gradient(135deg, var(--accent-soft), var(--warn-soft)); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin-top: 22px; display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
+  .creator-program h3 { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+  .creator-program p { font-size: 12px; color: var(--text-muted); line-height: 1.55; max-width: 540px; }
+
+  .pricing-faq { margin-top: 36px; }
+  .faq-item { padding: 16px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 500; }
+  .faq-a { display: none; margin-top: 10px; font-size: 12px; color: var(--text-muted); line-height: 1.65; }
+  .faq-item.open .faq-a { display: block; }
+  .faq-item.open .faq-q svg { transform: rotate(180deg); }
+  .faq-q svg { width: 14px; height: 14px; transition: transform 0.2s; }
+
+  /* === ONBOARDING MODAL === */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.visible { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border-strong); border-radius: 14px; max-width: 540px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 24px 48px rgba(0,0,0,0.4); position: relative; }
+  .modal-close { position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .modal-close:hover { background: var(--surface-2); color: var(--text); }
+  .modal-close svg { width: 16px; height: 16px; }
+  .modal-content { padding: 32px; }
+  .modal-step { display: none; }
+  .modal-step.active { display: block; animation: fadeUp 0.25s ease; }
+  .step-indicator { display: flex; gap: 6px; margin-bottom: 24px; }
+  .step-dot { flex: 1; height: 3px; border-radius: 2px; background: var(--surface-3); transition: background 0.2s; }
+  .step-dot.active { background: var(--text); }
+  .step-dot.complete { background: var(--pos); }
+  .modal h3 { font-size: 22px; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 6px; }
+  .modal-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+
+  .broker-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .broker-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 10px; }
+  .broker-card:hover { border-color: var(--border-strong); }
+  .broker-card.selected { border-color: var(--pos); background: var(--pos-soft); }
+  .broker-logo { width: 32px; height: 32px; border-radius: 6px; background: var(--surface-3); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+  .broker-name { font-size: 13px; font-weight: 500; }
+  .broker-meta { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+  .strategy-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .strategy-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; cursor: pointer; transition: all 0.15s; display: flex; gap: 12px; align-items: center; }
+  .strategy-card:hover { border-color: var(--border-strong); }
+  .strategy-card.selected { border-color: var(--text); }
+  .strategy-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .strategy-info { flex: 1; }
+  .strategy-name { font-size: 13px; font-weight: 500; }
+  .strategy-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  .modal-actions { display: flex; gap: 8px; justify-content: space-between; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); }
+
+  /* Footer */
+  footer { border-top: 1px solid var(--border); margin-top: 60px; padding: 24px; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 11px; color: var(--text-dim); }
+  .disclaimer { max-width: 720px; line-height: 1.6; }
+
+  /* Vorabpauschale Edu Banner */
+  .vap-banner { background: var(--warn-soft); border: 1px solid transparent; border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; }
+  .vap-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--warn); color: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; flex-shrink: 0; }
+  .vap-content { font-size: 12px; }
+  .vap-title { font-weight: 500; color: var(--text); margin-bottom: 3px; font-size: 13px; }
+  .vap-body { color: var(--text-muted); line-height: 1.55; }
+  .vap-body strong { color: var(--text); font-weight: 500; }
+  .vap-action { background: none; border: 1px solid var(--border-strong); color: var(--text); padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; flex-shrink: 0; transition: all 0.15s; font-family: inherit; }
+  .vap-action:hover { background: var(--surface-2); }
+
+  @media (max-width: 900px) {
+    .vap-banner { grid-template-columns: 1fr; text-align: left; }
+    .vap-action { width: 100%; }
+  }
+
+  /* Skill-Level Toggle */
+  .skill-toggle { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); padding: 2px; border-radius: 8px; gap: 0; flex-shrink: 0; }
+  .skill-opt { border: none; background: transparent; color: var(--text-muted); font-family: 'Geist Mono'; font-size: 11px; font-weight: 500; padding: 4px 9px; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
+  .skill-opt:hover { color: var(--text); }
+  .skill-opt.active { background: var(--brand-soft); color: var(--brand); font-weight: 600; }
+
+  /* Skill-level feature visibility */
+  body.skill-beginner .intermediate-plus,
+  body.skill-beginner .pro-only { display: none !important; }
+  body.skill-intermediate .pro-only { display: none !important; }
+
+  /* V2 preview badge */
+  .v2-banner { background: var(--info-soft); color: var(--info); font-size: 11px; padding: 6px 12px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 14px; font-weight: 500; }
+  .v2-banner svg { width: 12px; height: 12px; }
+
+  /* Theme toggle */
+  .theme-toggle { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; flex-shrink: 0; }
+  .theme-toggle:hover { color: var(--text); border-color: var(--border-strong); }
+  .theme-toggle svg { width: 14px; height: 14px; }
+  .theme-toggle .sun { display: none; }
+  :root[data-theme="light"] .theme-toggle .moon { display: none; }
+  :root[data-theme="light"] .theme-toggle .sun { display: block; }
+
+  /* Toast */
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface-3); border: 1px solid var(--border-strong); border-radius: 8px; padding: 12px 16px; font-size: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 300; opacity: 0; transform: translateY(8px); transition: all 0.2s; pointer-events: none; max-width: 320px; }
+  .toast.visible { opacity: 1; transform: translateY(0); }
+
+  /* Mobile Bottom Nav */
+  .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10,10,10,0.92); backdrop-filter: blur(16px); border-top: 1px solid var(--border); padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0)); z-index: 80; justify-content: space-around; }
+  :root[data-theme="light"] .mobile-nav { background: rgba(255,255,255,0.92); }
+  .mnav-btn { background: none; border: none; color: var(--text-dim); padding: 6px 8px; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; font-family: inherit; cursor: pointer; transition: color 0.15s; flex: 1; }
+  .mnav-btn svg { width: 20px; height: 20px; }
+  .mnav-btn.active { color: var(--text); }
+  .mnav-btn:hover { color: var(--text-muted); }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .mobile-nav { display: flex; }
+    main { padding-bottom: 90px; }
+    .header-inner { gap: 10px; padding: 0 16px; }
+    .app { padding: 0 16px; }
+    nav.primary { display: none; }
+    .nav-link { padding: 6px 8px; }
+    .search-box { display: none; }
+    .two-col, .feed-layout, .stats-grid, .calc-grid, .vorsorge-hero, .creator-program { grid-template-columns: 1fr; }
+    .discover-grid, .vorsorge-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .profile-hero { grid-template-columns: 60px 1fr; }
+    .profile-hero .actions-row { grid-column: 1 / -1; }
+    .avatar-lg { width: 60px; height: 60px; font-size: 22px; }
+    .modal-content { padding: 24px 20px; }
+    .broker-list { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+<div class="header-inner">
+<div class="logo" data-view="profile">
+<svg class="logo-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<rect width="32" height="32" rx="8" fill="var(--brand)"/>
+<path d="M 8 22 Q 12 22 12 18 T 20 14 Q 24 14 24 10" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+<circle cx="24" cy="10" r="2.5" fill="#34d399"/>
+</svg>
+<span class="logo-text"><span class="logo-s">S</span>Trade</span>
+</div>
+
+<nav class="primary">
+<button class="nav-link" data-view="profile">Profil</button>
+<button class="nav-link active" data-view="feed">Feed</button>
+<button class="nav-link" data-view="discover">Discover</button>
+<button class="nav-link" data-view="vorsorge">Vorsorge</button>
+<button class="nav-link" data-view="pricing">Pricing</button>
+</nav>
+
+<div class="search-box">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+<input type="text" placeholder="Trader, Ticker oder Strategie…" id="search-input" autocomplete="off"/>
+<span class="kbd">⌘K</span>
+<div class="search-results" id="search-results"></div>
+</div>
+
+<div class="skill-toggle" id="skill-toggle" title="Erfahrungslevel wechseln">
+<button class="skill-opt" data-skill="beginner">B</button>
+<button class="skill-opt active" data-skill="intermediate">I</button>
+<button class="skill-opt" data-skill="pro">Pro</button>
+</div>
+
+<button class="theme-toggle" id="theme-toggle" aria-label="Theme wechseln">
+<svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+<svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+</button>
+
+<div style="position: relative;">
+<button class="icon-btn" id="notif-btn" aria-label="Benachrichtigungen">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+<span class="notif-dot" id="notif-dot"></span>
+</button>
+<div class="notif-dropdown" id="notif-dropdown">
+<div class="notif-header">Benachrichtigungen</div>
+<div class="notif-item">
+<div class="ni-icon" style="background: var(--pos-soft); color: var(--pos);">★</div>
+<div class="ni-text"><strong>Sara W.</strong> hat einen Trade mit +12.4% geschlossen<div class="ni-time">vor 14 Min.</div></div>
+</div>
+<div class="notif-item">
+<div class="ni-icon" style="background: var(--info-soft); color: var(--info);">+</div>
+<div class="ni-text"><strong>Marcus T.</strong> folgt dir jetzt<div class="ni-time">vor 2 Std.</div></div>
+</div>
+<div class="notif-item">
+<div class="ni-icon" style="background: var(--purple-soft); color: var(--purple);">✓</div>
+<div class="ni-text">Du hast einen neuen Badge freigeschaltet: <strong>15-Tage-Streak</strong><div class="ni-time">heute</div></div>
+</div>
+<div class="notif-item">
+<div class="ni-icon" style="background: var(--warn-soft); color: var(--warn);">€</div>
+<div class="ni-text"><strong>AVRG-Update:</strong> Dein Altersvorsorgedepot ist ab 1. Januar verfügbar<div class="ni-time">gestern</div></div>
+</div>
+</div>
+</div>
+
+<div class="avatar" title="Dein Account">M</div>
+</div>
+</header>
+
+<main class="app">
+
+<div class="demo-banner">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+v6 · Brand-Color Teal · Skill-Toggle oben rechts (B/I/Pro) · <strong style="color: var(--text); font-weight: 500;">Das bessere Performance-Cockpit für TR & Scalable.</strong>
+</div>
+
+<!-- ============ PROFILE VIEW ============ -->
+<section class="view" id="view-profile">
+
+<div class="profile-hero">
+<div class="avatar-lg">LK
+<span class="avatar-streak"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 0C13.5 4 8.5 5 8.5 10c0 2 1 3.5 2.5 4.5C9.5 14 8 12 8 9.5 8 11 7 12 6 13c-1 1-2 2.5-2 4.5C4 21 7 24 12 24s8-3 8-6.5c0-3-2-5-3.5-7C15 8.5 13.5 6 13.5 0z"/></svg>15</span>
+</div>
+<div>
+<div class="name-row">
+<span class="display-name">Lukas K.</span>
+<span class="level-badge" title="Level 7 — basiert auf konsistenter Performance, Trade-Disziplin und Community-Beiträgen">★ Level 7</span>
+<span class="verified-badge" id="verified-trigger">
+<svg viewBox="0 0 16 16" fill="currentColor"><path d="M14.207 4.793a1 1 0 0 1 0 1.414l-7 7a1 1 0 0 1-1.414 0l-3-3a1 1 0 1 1 1.414-1.414L6.5 11.086l6.293-6.293a1 1 0 0 1 1.414 0z"/></svg>
+Verified · IBKR
+</span>
+<span class="tier-badge">Tier 2 · €25–100k</span>
+<span style="font-size: 11px; color: var(--text-dim); font-family: 'Geist Mono';">Seit März 2024</span>
+</div>
+<p class="bio">Tech-Swing-Trader seit 2021 · DACH-Aktien & US-Large-Caps · Lieber konstant +25% mit Sharpe 1.8 als +60% mit Schlaganfall</p>
+<div class="stats-row">
+<span><strong>328</strong> Follower</span>
+<span><strong>142</strong> folgt</span>
+<span><strong>1.427</strong> Trades</span>
+<span><strong>Ø Hold</strong> 12d</span>
+</div>
+</div>
+<div class="actions-row">
+<button class="btn btn-primary" id="follow-btn">+ Folgen</button>
+<button class="btn btn-icon-only" title="Nachricht senden">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</button>
+<button class="btn btn-icon-only" title="Mehr">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+</button>
+</div>
+</div>
+
+<div class="subtabs">
+<button class="subtab active" data-subtab="overview">Übersicht</button>
+<button class="subtab" data-subtab="trades">Trades <span class="subtab-count">1.427</span></button>
+<button class="subtab intermediate-plus" data-subtab="stats">Stats</button>
+<button class="subtab" data-subtab="achievements">Erfolge <span class="subtab-count">12/30</span></button>
+</div>
+
+<div class="subview active" id="sub-overview">
+
+<div class="health-card">
+<div class="health-left">
+<div class="health-label">Trading Health Score <span class="health-info" title="Kombiniert Konsistenz, Risiko-Disziplin, Drawdown-Kontrolle und Performance — kein FOMO-Score">i</span></div>
+<div class="health-score-row">
+<svg class="health-ring" viewBox="0 0 120 120">
+<circle cx="60" cy="60" r="50" fill="none" stroke="var(--surface-3)" stroke-width="10"/>
+<circle cx="60" cy="60" r="50" fill="none" stroke="var(--pos)" stroke-width="10" stroke-dasharray="252 314" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+<text x="60" y="64" text-anchor="middle" fill="var(--text)" font-size="26" font-family="Geist Mono" font-weight="600">82</text>
+<text x="60" y="78" text-anchor="middle" fill="var(--text-muted)" font-size="9" font-family="Geist Mono">/ 100</text>
+</svg>
+<div class="health-breakdown">
+<div class="hb-row">
+<div class="hb-label">Konsistenz</div>
+<div class="hb-bar"><div class="hb-fill" style="width: 87%; background: var(--pos);"></div></div>
+<div class="hb-val mono">87</div>
+</div>
+<div class="hb-row">
+<div class="hb-label">Risiko-Disziplin</div>
+<div class="hb-bar"><div class="hb-fill" style="width: 91%; background: var(--pos);"></div></div>
+<div class="hb-val mono">91</div>
+</div>
+<div class="hb-row">
+<div class="hb-label">Drawdown-Kontrolle</div>
+<div class="hb-bar"><div class="hb-fill" style="width: 74%; background: var(--info);"></div></div>
+<div class="hb-val mono">74</div>
+</div>
+<div class="hb-row">
+<div class="hb-label">Performance</div>
+<div class="hb-bar"><div class="hb-fill" style="width: 78%; background: var(--info);"></div></div>
+<div class="hb-val mono">78</div>
+</div>
+</div>
+</div>
+</div>
+<div class="health-right">
+<div class="ai-insight">
+<div class="ai-header"><span class="ai-icon">✦</span> Was das für dich heißt</div>
+<p class="ai-body">Du hast in den letzten 90 Tagen <strong>jeden Stop respektiert</strong> und die Positionsgrößen konsistent zwischen 2–5% gehalten — das hebt dich von 73% deiner Peer-Gruppe ab.</p>
+<p class="ai-body">Wo du noch wachsen kannst: deine <strong>Event-Trades</strong> haben negative Expectancy (−0.12R). Halbiere die Positionsgröße bei diesen Setups, bis sich der Edge zeigt — oder lass sie weg.</p>
+<div class="trend-strip">
+<div class="trend-label">Health Score · 90 Tage</div>
+<svg class="trend-spark" viewBox="0 0 200 32" preserveAspectRatio="none">
+<defs>
+<linearGradient id="trendFill" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="var(--pos)" stop-opacity="0.3"/>
+<stop offset="100%" stop-color="var(--pos)" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<path d="M 0 22 L 14 24 L 28 19 L 42 21 L 56 17 L 70 18 L 84 14 L 98 16 L 112 12 L 126 13 L 140 9 L 154 11 L 168 8 L 182 7 L 200 6 L 200 32 L 0 32 Z" fill="url(#trendFill)"/>
+<path d="M 0 22 L 14 24 L 28 19 L 42 21 L 56 17 L 70 18 L 84 14 L 98 16 L 112 12 L 126 13 L 140 9 L 154 11 L 168 8 L 182 7 L 200 6" stroke="var(--pos)" stroke-width="1.5" fill="none"/>
+<circle cx="200" cy="6" r="2.5" fill="var(--pos)"/>
+</svg>
+<div class="trend-stats"><span>76 → 82 <span class="pos">↑ +6</span></span><span class="trend-stable">· stabil steigend</span></div>
+</div>
+<div class="ai-footer">KI-Analyse · basiert auf 1.427 verifizierten Trades</div>
+</div>
+</div>
+</div>
+
+<div class="kpi-grid">
+<div class="kpi" title="Zeitgewichtete Rendite — eliminiert Effekt von Kapitaleinlagen">
+<div class="kpi-label">Rendite <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+<div class="kpi-value pos" id="kpi-return">+34.2%</div>
+<div class="kpi-meta" id="kpi-return-meta">vs DAX +12.4% · TWR</div>
+</div>
+<div class="kpi" title="Calmar = Rendite / Max Drawdown — risikoadjustierte Performance" class="intermediate-plus" data-skill="intermediate-plus">
+<div class="kpi-label">Calmar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+<div class="kpi-value" id="kpi-calmar">3.52</div>
+<div class="kpi-meta" id="kpi-calmar-meta">Sharpe 1.78 · Sortino 2.41</div>
+</div>
+<div class="kpi intermediate-plus" title="Profit Factor = Bruttogewinn ÷ Bruttoverlust. >1.5 solid, >2.0 stark">
+<div class="kpi-label">Profit Factor <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+<div class="kpi-value" id="kpi-pf">2.04</div>
+<div class="kpi-meta" id="kpi-pf-meta">Win Rate 61% · Ø R 1.4</div>
+</div>
+<div class="kpi" title="Größter Peak-to-Trough-Rückgang. Recovery = Tage bis neues Hoch">
+<div class="kpi-label">Max DD <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+<div class="kpi-value neg" id="kpi-dd">−9.7%</div>
+<div class="kpi-meta" id="kpi-dd-meta">Aug 2025 · 23d Recovery</div>
+</div>
+</div>
+
+<div class="vap-banner intermediate-plus">
+<div class="vap-icon">⚠</div>
+<div class="vap-content">
+<div class="vap-title">Vorabpauschale 2026 · einmalige Schätzung für dich</div>
+<div class="vap-body">Basiszins 2026 = <strong>3,20%</strong>. Auf deine ETF-Position MSCI World rechnen wir mit ca. <strong>~127 € steuerpflichtigem Betrag</strong> im Januar 2027. Mit Teilfreistellung und Sparer-Pauschbetrag wahrscheinlich noch unkritisch — aber wir warnen dich rechtzeitig, falls dein Konto leer ist.</div>
+</div>
+<button class="vap-action">Mehr erfahren →</button>
+</div>
+
+<div class="chart-card">
+<div class="chart-header">
+<div class="chart-title-row">
+<span class="chart-title">Performance</span>
+<div class="bench-select" id="bench-select-trigger">
+<span id="bench-current">vs DAX</span>
+<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+<div class="bench-dropdown" id="bench-dropdown">
+<div class="bench-option active" data-bench="DAX">DAX</div>
+<div class="bench-option" data-bench="MSCI World">MSCI World</div>
+<div class="bench-option" data-bench="S&P 500">S&P 500</div>
+<div class="bench-option" data-bench="NASDAQ-100">NASDAQ-100</div>
+<div class="bench-option" data-bench="Cash">Cash (0%)</div>
+</div>
+</div>
+</div>
+<div class="range-buttons">
+<button class="range-btn" data-range="1M">1M</button>
+<button class="range-btn" data-range="3M">3M</button>
+<button class="range-btn" data-range="6M">6M</button>
+<button class="range-btn active" data-range="YTD">YTD</button>
+<button class="range-btn" data-range="1Y">1J</button>
+<button class="range-btn" data-range="ALL">All</button>
+</div>
+</div>
+
+<div class="chart-area" id="chart-area">
+<svg viewBox="0 0 800 220" preserveAspectRatio="none">
+<defs>
+<linearGradient id="userFill" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="var(--pos)" stop-opacity="0.18"/>
+<stop offset="100%" stop-color="var(--pos)" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<g>
+<line x1="0" y1="20" x2="800" y2="20" stroke="var(--border)" stroke-width="0.5"/>
+<line x1="0" y1="70" x2="800" y2="70" stroke="var(--border)" stroke-width="0.5"/>
+<line x1="0" y1="120" x2="800" y2="120" stroke="var(--border)" stroke-width="0.5"/>
+<line x1="0" y1="170" x2="800" y2="170" stroke="var(--border)" stroke-width="0.5"/>
+<text x="0" y="14" fill="var(--text-dim)" font-size="10" font-family="Geist Mono">+40%</text>
+<text x="0" y="64" fill="var(--text-dim)" font-size="10" font-family="Geist Mono">+20%</text>
+<text x="0" y="114" fill="var(--text-dim)" font-size="10" font-family="Geist Mono">0%</text>
+<text x="0" y="164" fill="var(--text-dim)" font-size="10" font-family="Geist Mono">−20%</text>
+</g>
+<path id="chart-fill" d="" fill="url(#userFill)"/>
+<path id="chart-bench" d="" fill="none" stroke="var(--text-dim)" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.7"/>
+<path id="chart-user" d="" fill="none" stroke="var(--pos)" stroke-width="2"/>
+<line id="chart-cursor" x1="0" y1="0" x2="0" y2="200" stroke="var(--text-muted)" stroke-width="0.5" opacity="0"/>
+<rect id="chart-hover" x="0" y="0" width="800" height="220" fill="transparent"/>
+</svg>
+<div class="chart-tooltip" id="chart-tooltip">
+<div class="tt-date" id="tt-date"></div>
+<div class="tt-row"><span class="tt-dot" style="background: var(--pos);"></span><span id="tt-user"></span></div>
+<div class="tt-row"><span class="tt-dot" style="background: var(--text-dim);"></span><span id="tt-bench"></span></div>
+</div>
+</div>
+<div class="chart-legend">
+<span class="legend-item"><span class="swatch" style="background: var(--pos);"></span> Lukas K. <span class="mono pos" id="legend-user">+34.2%</span></span>
+<span class="legend-item"><span class="swatch" style="background: var(--text-dim);"></span> <span id="legend-bench-name">DAX</span> <span class="mono" style="color: var(--text-muted);" id="legend-bench">+12.4%</span></span>
+</div>
+</div>
+
+<div class="two-col">
+
+<div class="card">
+<div class="card-title">
+<span>Letzte Trades</span>
+<button class="btn btn-sm" data-subtab-jump="trades">Alle ansehen</button>
+</div>
+<div class="card-subtitle">Klick auf einen Trade für Setup, Begründung und Lesson</div>
+
+<div class="trade">
+<div class="trade-main">
+<div class="trade-left">
+<span class="setup-tag">PB</span>
+<div>
+<div class="ticker">NVDA <span style="color: var(--text-dim); font-weight: 400;">· Long</span></div>
+<div class="trade-meta">geschlossen vor 2d · 14d gehalten · 3.0% Buch · realisiert</div>
+</div>
+</div>
+<div class="trade-right">
+<div class="trade-pct pos">+8.4%</div>
+<svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+</div>
+</div>
+<div class="trade-detail">
+<div class="trade-journal">
+<div class="journal-label">Setup</div><div class="journal-value">Pullback an 21-EMA nach Breakout, anchored VWAP als Support</div>
+<div class="journal-label">Thesis</div><div class="journal-value">Hyperscaler-Capex bis 2026 stützt Rechenzentrumsnachfrage. Trendfortsetzung in die Earnings hinein.</div>
+<div class="journal-label">Entry</div><div class="journal-value">€118.40 · Stop €111.00 (−6.3%) · Target €130 (+9.8%)</div>
+<div class="journal-label">Exit</div><div class="journal-value">€128.35 · Teilgewinn vor Earnings, Runner mit €126 Trailing Stop</div>
+<div class="journal-label">Outcome</div><div class="journal-value">+1.4R · +0.25% Portfolio-Beitrag</div>
+<div class="journal-label">Lesson</div><div class="journal-value">Earnings-Risiko zu aggressiv reduziert — Vollposition hätte Target erreicht. Nächstes Mal: 50% pre-print, nicht 67%.</div>
+</div>
+</div>
+</div>
+
+<div class="trade">
+<div class="trade-main">
+<div class="trade-left">
+<span class="setup-tag">BO</span>
+<div>
+<div class="ticker">SAP <span style="color: var(--text-dim); font-weight: 400;">· Long</span></div>
+<div class="trade-meta">geschlossen vor 5d · 41d gehalten · 5.0% Buch · realisiert</div>
+</div>
+</div>
+<div class="trade-right">
+<div class="trade-pct pos">+12.1%</div>
+<svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+</div>
+</div>
+<div class="trade-detail">
+<div class="trade-journal">
+<div class="journal-label">Setup</div><div class="journal-value">Mehrmonatige Base-Breakout · €145 alter Widerstand wird Support</div>
+<div class="journal-label">Thesis</div><div class="journal-value">Cloud-Transition unterbewertet · Q2 RPO-Wachstum als Signal</div>
+<div class="journal-label">Entry</div><div class="journal-value">€146.20 · Stop €138.00 (−5.6%) · Target €165</div>
+<div class="journal-label">Exit</div><div class="journal-value">€163.95 nahe 52w-Hoch — Trailing Stop, Kapital für neue Setups frei</div>
+<div class="journal-label">Outcome</div><div class="journal-value">+2.2R · +0.61% Portfolio-Beitrag</div>
+<div class="journal-label">Lesson</div><div class="journal-value">Geduld bei der Base hat sich gelohnt — durch 3 Fakeouts gehalten. Bestätigt These-getriebene Sizing über Price-Action-Sizing.</div>
+</div>
+</div>
+</div>
+
+<div class="trade">
+<div class="trade-main">
+<div class="trade-left">
+<span class="setup-tag">EV</span>
+<div>
+<div class="ticker">TSLA <span style="color: var(--text-dim); font-weight: 400;">· Long</span></div>
+<div class="trade-meta">geschlossen vor 8d · 6d gehalten · 2.0% Buch · realisiert</div>
+</div>
+</div>
+<div class="trade-right">
+<div class="trade-pct neg">−4.2%</div>
+<svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+</div>
+</div>
+<div class="trade-detail">
+<div class="trade-journal">
+<div class="journal-label">Setup</div><div class="journal-value">Pre-Delivery-Event · Momentum-Continuation</div>
+<div class="journal-label">Thesis</div><div class="journal-value">Q3-Auslieferungen über Konsens, Follow-Through-Pop erwartet</div>
+<div class="journal-label">Entry</div><div class="journal-value">$248.00 · Stop $237.50 (−4.2%) · Target $268</div>
+<div class="journal-label">Exit</div><div class="journal-value">Stop bei $237.50 ausgelöst, nachdem Lieferzahlen unter Buy-Side-Whisper kamen</div>
+<div class="journal-label">Outcome</div><div class="journal-value">−1.0R · −0.08% Portfolio-Beitrag</div>
+<div class="journal-label">Lesson</div><div class="journal-value">Event-Trades brauchen kleinere Größe. Half-Position wäre richtig gewesen. Pattern: Event-Trades haben niedrigere Win Rate als Setup-Trades.</div>
+</div>
+</div>
+</div>
+
+<div class="trade">
+<div class="trade-main">
+<div class="trade-left">
+<span class="setup-tag">OPT</span>
+<div>
+<div class="ticker">SPY 460C 17 Mai <span style="color: var(--text-dim); font-weight: 400;">· Long</span></div>
+<div class="trade-meta">geschlossen vor 11d · 3d gehalten · 1.0% Buch · realisiert</div>
+</div>
+</div>
+<div class="trade-right">
+<div class="trade-pct pos">+22.7%</div>
+<svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+</div>
+</div>
+<div class="trade-detail">
+<div class="trade-journal">
+<div class="journal-label">Setup</div><div class="journal-value">Kurzlaufende Calls in CPI · hohe Conviction, Makro-View</div>
+<div class="journal-label">Thesis</div><div class="journal-value">Kühlende Shelter-Komponente, dovish Surprise wahrscheinlich</div>
+<div class="journal-label">Entry</div><div class="journal-value">$2.34 · Sizing: 1% Risiko bei Total Loss · 5 Kontrakte</div>
+<div class="journal-label">Exit</div><div class="journal-value">$2.87 — geschlossen als Momentum mid-session stoppte</div>
+<div class="journal-label">Outcome</div><div class="journal-value">+1.0R · 22.7% auf Premium = +0.23% Portfolio</div>
+<div class="journal-label">Lesson</div><div class="journal-value">Defined-Risk via Premium-Sizing hat funktioniert. Nicht nachjagen wenn erste Phase fade.</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="card">
+<div class="card-title"><span>Allokation</span></div>
+<div class="card-subtitle">Sektoren · aktuelle offene Positionen</div>
+<div class="allocation-grid">
+<svg class="donut-svg" viewBox="0 0 42 42">
+<circle cx="21" cy="21" r="15.915" fill="transparent" stroke="var(--surface-2)" stroke-width="6"/>
+<circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#34d399" stroke-width="6" stroke-dasharray="32 100" stroke-dashoffset="0" transform="rotate(-90 21 21)"/>
+<circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#60a5fa" stroke-width="6" stroke-dasharray="22 100" stroke-dashoffset="-32" transform="rotate(-90 21 21)"/>
+<circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#d4a373" stroke-width="6" stroke-dasharray="14 100" stroke-dashoffset="-54" transform="rotate(-90 21 21)"/>
+<circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#a78bfa" stroke-width="6" stroke-dasharray="9 100" stroke-dashoffset="-68" transform="rotate(-90 21 21)"/>
+<circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#f87171" stroke-width="6" stroke-dasharray="6 100" stroke-dashoffset="-77" transform="rotate(-90 21 21)"/>
+<circle cx="21" cy="21" r="15.915" fill="transparent" stroke="var(--surface-3)" stroke-width="6" stroke-dasharray="17 100" stroke-dashoffset="-83" transform="rotate(-90 21 21)"/>
+<text x="21" y="22" text-anchor="middle" fill="var(--text)" font-size="6" font-family="Geist Mono" font-weight="500">83%</text>
+<text x="21" y="27" text-anchor="middle" fill="var(--text-muted)" font-size="3" font-family="Geist Mono">deployed</text>
+</svg>
+<div class="alloc-list">
+<div class="alloc-row"><div class="alloc-left"><span class="alloc-dot" style="background: #34d399"></span>Tech</div><span class="alloc-pct">32%</span></div>
+<div class="alloc-row"><div class="alloc-left"><span class="alloc-dot" style="background: #60a5fa"></span>Industrie</div><span class="alloc-pct">22%</span></div>
+<div class="alloc-row"><div class="alloc-left"><span class="alloc-dot" style="background: #d4a373"></span>Finanzen</div><span class="alloc-pct">14%</span></div>
+<div class="alloc-row"><div class="alloc-left"><span class="alloc-dot" style="background: #a78bfa"></span>Healthcare</div><span class="alloc-pct">9%</span></div>
+<div class="alloc-row"><div class="alloc-left"><span class="alloc-dot" style="background: #f87171"></span>Optionen</div><span class="alloc-pct">6%</span></div>
+<div class="alloc-row"><div class="alloc-left"><span class="alloc-dot" style="background: var(--surface-3)"></span>Cash</div><span class="alloc-pct">17%</span></div>
+</div>
+</div>
+
+<div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border);">
+<div style="font-size: 12px; font-weight: 500; margin-bottom: 10px;">Peer-Ranking <span style="color: var(--text-dim); font-weight: 400; margin-left: 4px;">· Tier 2 Swing · 90d</span></div>
+<div style="display: flex; align-items: baseline; gap: 6px; margin-bottom: 10px;">
+<span class="mono" style="font-size: 24px; font-weight: 500;" id="peer-rank">12</span>
+<span style="font-size: 12px; color: var(--text-muted);">/ 100 Perzentil · Top-Decile</span>
+</div>
+<div style="font-size: 11px; color: var(--text-muted); line-height: 1.65;">
+Unter <strong style="color: var(--text);">472 verifizierten Swing-Tradern</strong> deiner Klasse. Stabil: 14. Perzentil im letzten Quartal, 9. davor.
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="tags-row">
+<button class="tag tag-strategy">Swing Trading</button>
+<button class="tag tag-strategy">Tech-fokussiert</button>
+<button class="tag tag-strategy">Long-Bias</button>
+<button class="tag tag-setup">Pullback-Setups</button>
+<button class="tag tag-setup">Breakouts</button>
+<button class="tag tag-setup">Event-driven (selten)</button>
+<button class="tag tag-setup">Ø Hold 12d</button>
+</div>
+
+</div>
+
+<div class="subview" id="sub-trades">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 12px;">
+<div>
+<div class="card-title">Alle Trades</div>
+<div class="card-subtitle">Verifizierte History · 1.427 Trades seit März 2024 · alle Beträge nur als %</div>
+</div>
+<div class="filter-chips">
+<button class="chip" data-trade-filter="all">Alle</button>
+<button class="chip active" data-trade-filter="90d">Letzte 90d</button>
+<button class="chip" data-trade-filter="wins">Gewinner</button>
+<button class="chip" data-trade-filter="losses">Verlierer</button>
+</div>
+</div>
+
+<div class="card" style="padding: 6px 16px;">
+<table class="trade-table" id="trades-table">
+<thead>
+<tr>
+<th data-sort="date" class="sorted">Datum</th>
+<th data-sort="ticker">Ticker</th>
+<th data-sort="setup">Setup</th>
+<th>Side</th>
+<th class="right" data-sort="hold">Hold</th>
+<th class="right" data-sort="size">Size</th>
+<th class="right" data-sort="r">R</th>
+<th class="right" data-sort="ret">Rendite</th>
+</tr>
+</thead>
+<tbody id="trades-tbody"></tbody>
+</table>
+</div>
+<div style="margin-top: 12px; font-size: 11px; color: var(--text-dim); text-align: center;">Setup-Legende: PB = Pullback · BO = Breakout · EV = Event-driven · OPT = Options</div>
+</div>
+
+<div class="subview" id="sub-stats">
+<div class="stats-grid">
+
+<div class="card">
+<div class="card-title">R-Multiple-Verteilung</div>
+<div class="card-subtitle">Outcome jedes geschlossenen Trades in R-Einheiten · letzte 90 Tage</div>
+<div class="histogram">
+<div class="bar neg" style="height: 8%;" title="−3R: 3 Trades"><span class="bar-label">−3R</span></div>
+<div class="bar neg" style="height: 12%;" title="−2R: 5 Trades"><span class="bar-label">−2R</span></div>
+<div class="bar neg" style="height: 32%;" title="−1R: 14 Trades"><span class="bar-label">−1R</span></div>
+<div class="bar neg" style="height: 18%;" title="−0.5R: 8 Trades"><span class="bar-label">−0.5R</span></div>
+<div class="bar pos" style="height: 14%;" title="0R: 6 Trades"><span class="bar-label">0</span></div>
+<div class="bar pos" style="height: 38%;" title="+0.5R: 17 Trades"><span class="bar-label">+0.5R</span></div>
+<div class="bar pos" style="height: 65%;" title="+1R: 29 Trades"><span class="bar-label">+1R</span></div>
+<div class="bar pos" style="height: 88%;" title="+1.5R: 39 Trades"><span class="bar-label">+1.5R</span></div>
+<div class="bar pos" style="height: 72%;" title="+2R: 32 Trades"><span class="bar-label">+2R</span></div>
+<div class="bar pos" style="height: 42%;" title="+2.5R: 19 Trades"><span class="bar-label">+2.5R</span></div>
+<div class="bar pos" style="height: 26%;" title="+3R: 12 Trades"><span class="bar-label">+3R</span></div>
+<div class="bar pos" style="height: 12%;" title="+4R+: 5 Trades"><span class="bar-label">+4R+</span></div>
+</div>
+<div style="margin-top: 32px; padding-top: 14px; border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+<div><div style="font-size: 11px; color: var(--text-muted);">Ø Gewinner</div><div class="mono pos" style="font-size: 14px; font-weight: 500;">+1.83R</div></div>
+<div><div style="font-size: 11px; color: var(--text-muted);">Ø Verlierer</div><div class="mono neg" style="font-size: 14px; font-weight: 500;">−0.91R</div></div>
+<div><div style="font-size: 11px; color: var(--text-muted);">Expectancy</div><div class="mono pos" style="font-size: 14px; font-weight: 500;">+0.76R</div></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">Monatsrenditen</div>
+<div class="card-subtitle">Heatmap pro Monat seit Start</div>
+<div class="calendar" style="margin-top: 14px;">
+<div></div>
+<div class="cal-month">J</div><div class="cal-month">F</div><div class="cal-month">M</div><div class="cal-month">A</div><div class="cal-month">M</div><div class="cal-month">J</div><div class="cal-month">J</div><div class="cal-month">A</div><div class="cal-month">S</div><div class="cal-month">O</div><div class="cal-month">N</div><div class="cal-month">D</div>
+
+<div class="cal-label">'24</div>
+<div class="cal-cell" style="background: var(--surface-2); color: var(--text-dim);">—</div><div class="cal-cell" style="background: var(--surface-2); color: var(--text-dim);">—</div><div class="cal-cell" style="background: rgba(52,211,153,0.2); color: var(--pos);" title="März 2024: +2.1%">2.1</div><div class="cal-cell" style="background: rgba(52,211,153,0.4); color: var(--pos);">3.8</div><div class="cal-cell" style="background: rgba(248,113,113,0.3); color: var(--neg);">−1.4</div><div class="cal-cell" style="background: rgba(52,211,153,0.5); color: var(--pos);">5.2</div><div class="cal-cell" style="background: rgba(52,211,153,0.3); color: var(--pos);">2.7</div><div class="cal-cell" style="background: rgba(248,113,113,0.5); color: var(--neg);">−4.1</div><div class="cal-cell" style="background: rgba(52,211,153,0.6); color: var(--pos);">6.4</div><div class="cal-cell" style="background: rgba(52,211,153,0.4); color: var(--pos);">3.5</div><div class="cal-cell" style="background: rgba(52,211,153,0.7); color: var(--pos);">7.1</div><div class="cal-cell" style="background: rgba(248,113,113,0.2); color: var(--neg);">−0.8</div>
+
+<div class="cal-label">'25</div>
+<div class="cal-cell" style="background: rgba(52,211,153,0.5); color: var(--pos);">5.0</div><div class="cal-cell" style="background: rgba(52,211,153,0.3); color: var(--pos);">2.4</div><div class="cal-cell" style="background: rgba(52,211,153,0.4); color: var(--pos);">3.9</div><div class="cal-cell" style="background: rgba(248,113,113,0.4); color: var(--neg);">−2.6</div><div class="cal-cell" style="background: rgba(52,211,153,0.6); color: var(--pos);">6.1</div><div class="cal-cell" style="background: rgba(52,211,153,0.4); color: var(--pos);">3.6</div><div class="cal-cell" style="background: rgba(52,211,153,0.5); color: var(--pos);">4.8</div><div class="cal-cell" style="background: rgba(248,113,113,0.7); color: var(--neg);">−6.2</div><div class="cal-cell" style="background: rgba(52,211,153,0.3); color: var(--pos);">2.1</div><div class="cal-cell" style="background: rgba(52,211,153,0.6); color: var(--pos);">5.8</div><div class="cal-cell" style="background: rgba(52,211,153,0.4); color: var(--pos);">3.4</div><div class="cal-cell" style="background: rgba(52,211,153,0.5); color: var(--pos);">4.2</div>
+
+<div class="cal-label">'26</div>
+<div class="cal-cell" style="background: rgba(52,211,153,0.7); color: var(--pos);">7.6</div><div class="cal-cell" style="background: rgba(52,211,153,0.5); color: var(--pos);">5.1</div><div class="cal-cell" style="background: rgba(52,211,153,0.6); color: var(--pos);">6.4</div><div class="cal-cell" style="background: rgba(52,211,153,0.7); color: var(--pos);">8.2</div><div class="cal-cell" style="background: rgba(52,211,153,0.3); color: var(--pos);">2.5</div><div class="cal-cell" style="background: var(--surface-2); color: var(--text-dim);">—</div><div class="cal-cell" style="background: var(--surface-2); color: var(--text-dim);">—</div><div class="cal-cell" style="background: var(--surface-2); color: var(--text-dim);">—</div><div class="cal-cell" style="background: var(--surface-2); color: var(--text-dim);">—</div><div class="cal-cell" style="background: var(--surface-2); color: var(--text-dim);">—</div><div class="cal-cell" style="background: var(--surface-2); color: var(--text-dim);">—</div><div class="cal-cell" style="background: var(--surface-2); color: var(--text-dim);">—</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">Setup-Performance</div>
+<div class="card-subtitle">Win Rate und Expectancy pro Setup-Typ</div>
+<div style="display: grid; grid-template-columns: 1fr auto auto auto; gap: 12px 16px; margin-top: 14px; font-size: 12px; align-items: center;">
+<div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em;">Setup</div>
+<div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; text-align: right;">N</div>
+<div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; text-align: right;">Win %</div>
+<div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; text-align: right;">Expectancy</div>
+<div><span class="setup-tag" style="margin-right: 8px;">PB</span>Pullback</div><div class="mono" style="text-align: right; color: var(--text-muted);">412</div><div class="mono" style="text-align: right;">68%</div><div class="mono pos" style="text-align: right;">+0.94R</div>
+<div><span class="setup-tag" style="margin-right: 8px;">BO</span>Breakout</div><div class="mono" style="text-align: right; color: var(--text-muted);">287</div><div class="mono" style="text-align: right;">59%</div><div class="mono pos" style="text-align: right;">+0.81R</div>
+<div><span class="setup-tag" style="margin-right: 8px;">EV</span>Event-driven</div><div class="mono" style="text-align: right; color: var(--text-muted);">94</div><div class="mono" style="text-align: right;">48%</div><div class="mono neg" style="text-align: right;">−0.12R</div>
+<div><span class="setup-tag" style="margin-right: 8px;">OPT</span>Optionen</div><div class="mono" style="text-align: right; color: var(--text-muted);">61</div><div class="mono" style="text-align: right;">54%</div><div class="mono pos" style="text-align: right;">+0.43R</div>
+</div>
+<div style="margin-top: 16px; padding: 12px; background: var(--warn-soft); border-radius: 8px; font-size: 11px; color: var(--warn); line-height: 1.55;">
+Insight: Event-driven Setups haben negative Expectancy. Entweder droppen oder bei 25–50% Größe halten, bis Edge sich beweist.
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">Kosten & Steuern</div>
+<div class="card-subtitle">Netto vs. Brutto · YTD</div>
+<div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-top: 14px; font-size: 13px;">
+<div style="color: var(--text-muted);">Brutto-Rendite</div><div class="mono pos" style="text-align: right; font-weight: 500;">+34.2%</div>
+<div style="color: var(--text-muted);">Provisionen & Spread</div><div class="mono neg" style="text-align: right;">−0.8%</div>
+<div style="color: var(--text-muted);">Borrow & FX</div><div class="mono neg" style="text-align: right;">−0.2%</div>
+<div style="color: var(--text-muted);">Nach Kosten</div><div class="mono pos" style="text-align: right; font-weight: 500; border-top: 1px solid var(--border); padding-top: 6px;">+33.2%</div>
+<div style="color: var(--text-muted);">Steuer (DE Abgelt. est.)</div><div class="mono neg" style="text-align: right;">−8.8%</div>
+<div style="font-weight: 500;">Nach Steuern</div><div class="mono pos" style="text-align: right; font-weight: 500; font-size: 16px;">+24.4%</div>
+</div>
+<div style="margin-top: 14px; padding: 10px 12px; background: var(--surface-2); border-radius: 6px; font-size: 11px; color: var(--text-muted); line-height: 1.55;">
+Steuer geschätzt mit deutscher Abgeltungssteuer (26.375%) auf realisierte Gewinne nach Sparer-Pauschbetrag (1.000 €). Keine Steuerberatung.
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="subview" id="sub-achievements">
+<div class="card">
+<div class="card-title">Erfolge & Streaks</div>
+<div class="card-subtitle">Gamification, die Disziplin belohnt — keine FOMO-Trophäen</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0;">
+<div style="background: linear-gradient(135deg, rgba(249,115,22,0.12), rgba(251,191,36,0.12)); border: 1px solid var(--border); border-radius: 10px; padding: 16px;">
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;"><span style="font-size: 22px;">🔥</span><span style="font-size: 12px; font-weight: 500;">Aktueller Streak</span></div>
+<div class="mono" style="font-size: 26px; font-weight: 600;">15 Tage</div>
+<div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Längster: 42 Tage</div>
+</div>
+<div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 16px;">
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;"><span style="font-size: 22px;">★</span><span style="font-size: 12px; font-weight: 500;">Level</span></div>
+<div class="mono" style="font-size: 26px; font-weight: 600;">7</div>
+<div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">2.840 / 3.500 XP</div>
+<div style="height: 4px; background: var(--surface-3); border-radius: 2px; margin-top: 8px; overflow: hidden;"><div style="height: 100%; background: var(--purple); width: 81%;"></div></div>
+</div>
+<div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 16px;">
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;"><span style="font-size: 22px;">🎯</span><span style="font-size: 12px; font-weight: 500;">Disziplin-Score</span></div>
+<div class="mono" style="font-size: 26px; font-weight: 600;">87<span style="font-size: 14px; color: var(--text-muted);">/100</span></div>
+<div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Stops respektiert · Sizing konsistent</div>
+</div>
+</div>
+
+<div class="card-title" style="margin-top: 14px;">Badges <span style="color: var(--text-dim); font-weight: 400; font-size: 11px;">12 von 30</span></div>
+<div class="achievements-grid">
+<div class="badge-item" title="Erste 10 verifizierte Trades">
+<div class="badge-icon">🌱</div>
+<div class="badge-name">First Steps</div>
+<div class="badge-desc">10 Trades</div>
+</div>
+<div class="badge-item" title="100 verifizierte Trades">
+<div class="badge-icon">📊</div>
+<div class="badge-name">Centurion</div>
+<div class="badge-desc">100 Trades</div>
+</div>
+<div class="badge-item" title="1.000 verifizierte Trades">
+<div class="badge-icon">🏆</div>
+<div class="badge-name">Veteran</div>
+<div class="badge-desc">1.000 Trades</div>
+</div>
+<div class="badge-item" title="Alle Stops respektiert über 30 Tage">
+<div class="badge-icon">🛡️</div>
+<div class="badge-name">Iron Discipline</div>
+<div class="badge-desc">30d Stops</div>
+</div>
+<div class="badge-item" title="3 Monate in Folge positiv">
+<div class="badge-icon">🌊</div>
+<div class="badge-name">Tide Rider</div>
+<div class="badge-desc">3M positive</div>
+</div>
+<div class="badge-item" title="Drawdown unter 5% über 6 Monate">
+<div class="badge-icon">⚓</div>
+<div class="badge-name">Anchored</div>
+<div class="badge-desc">DD &lt;5% / 6M</div>
+</div>
+<div class="badge-item" title="50 hilfreiche Posts">
+<div class="badge-icon">💬</div>
+<div class="badge-name">Mentor</div>
+<div class="badge-desc">50 Posts</div>
+</div>
+<div class="badge-item" title="Trade-Journal über 30 Tage gepflegt">
+<div class="badge-icon">📓</div>
+<div class="badge-name">Journalist</div>
+<div class="badge-desc">30d Journal</div>
+</div>
+<div class="badge-item" title="20% Outperformance vs Benchmark">
+<div class="badge-icon">⚡</div>
+<div class="badge-name">Alpha</div>
+<div class="badge-desc">+20% vs Bench</div>
+</div>
+<div class="badge-item" title="Altersvorsorgedepot eröffnet">
+<div class="badge-icon">🌳</div>
+<div class="badge-name">Future Self</div>
+<div class="badge-desc">AVD-User</div>
+</div>
+<div class="badge-item" title="Erstes Frühstart-Rente-Setup">
+<div class="badge-icon">👶</div>
+<div class="badge-name">Family First</div>
+<div class="badge-desc">Frühstart</div>
+</div>
+<div class="badge-item" title="Profit Factor &gt; 2.0">
+<div class="badge-icon">💎</div>
+<div class="badge-name">Diamond Hands</div>
+<div class="badge-desc">PF &gt; 2.0</div>
+</div>
+<div class="badge-item locked" title="Noch nicht freigeschaltet">
+<div class="badge-icon">🔒</div>
+<div class="badge-name">Sharpe Master</div>
+<div class="badge-desc">Sharpe &gt; 2.5</div>
+</div>
+<div class="badge-item locked" title="Noch nicht freigeschaltet">
+<div class="badge-icon">🔒</div>
+<div class="badge-name">Calmar King</div>
+<div class="badge-desc">Calmar &gt; 5</div>
+</div>
+<div class="badge-item locked" title="Noch nicht freigeschaltet">
+<div class="badge-icon">🔒</div>
+<div class="badge-name">Hot Streak</div>
+<div class="badge-desc">100d Streak</div>
+</div>
+<div class="badge-item locked" title="Noch nicht freigeschaltet">
+<div class="badge-icon">🔒</div>
+<div class="badge-name">Top 1%</div>
+<div class="badge-desc">P99 Tier</div>
+</div>
+</div>
+</div>
+</div>
+
+</section>
+
+<!-- ============ FEED VIEW ============ -->
+<section class="view active" id="view-feed">
+
+<div class="feed-hero">
+<div class="fh-streak">
+<span class="fh-flame"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 0C13.5 4 8.5 5 8.5 10c0 2 1 3.5 2.5 4.5C9.5 14 8 12 8 9.5 8 11 7 12 6 13c-1 1-2 2.5-2 4.5C4 21 7 24 12 24s8-3 8-6.5c0-3-2-5-3.5-7C15 8.5 13.5 6 13.5 0z"/></svg></span>
+<div>
+<div class="fh-streak-num">15 Tage</div>
+<div class="fh-streak-label">Disziplin-Streak · Stops respektiert</div>
+</div>
+</div>
+<div class="fh-prompt">
+<div class="fh-prompt-text"><strong>Heute schon reflektiert?</strong><br/>Ein kurzes Journal-Eintrag zu deinem letzten Trade hält die Streak.</div>
+<button class="btn btn-primary">Reflektieren →</button>
+</div>
+</div>
+
+<div class="feed-filters">
+<button class="feed-filter active" data-feed="following">Folge ich</button>
+<button class="feed-filter" data-feed="all">Alle Verifizierten</button>
+<button class="feed-filter" data-feed="strategies">Meine Strategien</button>
+<button class="feed-filter" data-feed="vorsorge">Vorsorge</button>
+<button class="feed-filter" data-feed="discoveries">Entdecken</button>
+</div>
+
+<div class="feed-layout">
+<div id="feed-posts"></div>
+
+<aside>
+<div class="sidebar-card sidebar-rank">
+<div class="sidebar-title">Dein Peer-Ranking</div>
+<div class="rank-row">
+<div class="rank-pos">
+<span class="rank-num">12</span>
+<span class="rank-of">/ 472</span>
+</div>
+<div class="rank-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--pos)" stroke-width="2.5"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg> +2</div>
+</div>
+<div class="rank-bar"><div class="rank-fill" style="width: 88%;"></div></div>
+<div class="rank-meta">Top 12% deiner Klasse · Tier 2 Swing</div>
+<div class="rank-spark">
+<svg viewBox="0 0 200 32" preserveAspectRatio="none">
+<path d="M 0 22 L 14 24 L 28 19 L 42 21 L 56 17 L 70 18 L 84 14 L 98 16 L 112 12 L 126 13 L 140 9 L 154 11 L 168 8 L 182 7 L 200 6" stroke="var(--pos)" stroke-width="1.5" fill="none"/>
+<circle cx="200" cy="6" r="2.5" fill="var(--pos)"/>
+</svg>
+</div>
+<button class="btn btn-sm" style="width: 100%; justify-content: center; margin-top: 10px;" data-view="discover">Vergleichen →</button>
+</div>
+
+<div class="sidebar-card">
+<div class="sidebar-title">Aktive Challenges</div>
+<div class="challenge">
+<div class="ch-header"><span class="ch-icon" style="background: var(--pos-soft); color: var(--pos);">🛡</span><div class="ch-text"><div class="ch-name">30-Tage Disziplin</div><div class="ch-desc">Stop in jedem Trade respektiert</div></div></div>
+<div class="ch-progress"><div class="ch-bar"><div class="ch-fill" style="width: 80%; background: var(--pos);"></div></div><div class="ch-count">24/30</div></div>
+</div>
+<div class="challenge">
+<div class="ch-header"><span class="ch-icon" style="background: var(--info-soft); color: var(--info);">📓</span><div class="ch-text"><div class="ch-name">Reflexions-Streak</div><div class="ch-desc">Trade-Journal jeden Tag</div></div></div>
+<div class="ch-progress"><div class="ch-bar"><div class="ch-fill" style="width: 50%; background: var(--info);"></div></div><div class="ch-count">15/30</div></div>
+</div>
+<div class="challenge">
+<div class="ch-header"><span class="ch-icon" style="background: var(--purple-soft); color: var(--purple);">⚡</span><div class="ch-text"><div class="ch-name">Sharpe-Master</div><div class="ch-desc">90 Tage mit Sharpe &gt; 2.0</div></div></div>
+<div class="ch-progress"><div class="ch-bar"><div class="ch-fill" style="width: 33%; background: var(--purple);"></div></div><div class="ch-count">30/90</div></div>
+</div>
+</div>
+
+<div class="sidebar-card">
+<div class="sidebar-title">Trending Strategien</div>
+<div class="trending-item" data-trend="semis"><div><div class="trending-name">Sektor-Rotation · Semis</div><div class="trending-meta">142 Trader · letzte 7d</div></div><div class="trending-pct pos">+4.8%</div></div>
+<div class="trending-item" data-trend="dax"><div><div class="trending-name">DAX-Breakout-Swings</div><div class="trending-meta">87 Trader · letzte 7d</div></div><div class="trending-pct pos">+3.1%</div></div>
+<div class="trending-item" data-trend="biotech"><div><div class="trending-name">Biotech-Katalysatoren</div><div class="trending-meta">54 Trader · letzte 7d</div></div><div class="trending-pct pos">+2.4%</div></div>
+<div class="trending-item" data-trend="avd"><div><div class="trending-name">Altersvorsorgedepot ETFs</div><div class="trending-meta">231 Sparer · letzte 7d</div></div><div class="trending-pct pos">+1.6%</div></div>
+</div>
+
+<div class="sidebar-card">
+<div class="sidebar-title">Vorgeschlagen für dich</div>
+<div class="suggested-item">
+<div class="avatar-md" style="background: rgba(212,163,115,0.2); color: var(--accent); width: 32px; height: 32px; font-size: 11px;">JP</div>
+<div class="suggested-info">
+<div class="suggested-name">Jonas P. <svg width="9" height="9" viewBox="0 0 16 16" fill="var(--pos)"><path d="M14.207 4.793a1 1 0 0 1 0 1.414l-7 7a1 1 0 0 1-1.414 0l-3-3a1 1 0 1 1 1.414-1.414L6.5 11.086l6.293-6.293a1 1 0 0 1 1.414 0z"/></svg></div>
+<div class="suggested-meta">Optionen-Income · +28.6% YTD</div>
+</div>
+<button class="btn btn-sm follow-suggested">Folgen</button>
+</div>
+<div class="suggested-item">
+<div class="avatar-md" style="background: rgba(248,113,113,0.2); color: var(--neg); width: 32px; height: 32px; font-size: 11px;">KH</div>
+<div class="suggested-info">
+<div class="suggested-name">Kira H. <svg width="9" height="9" viewBox="0 0 16 16" fill="var(--pos)"><path d="M14.207 4.793a1 1 0 0 1 0 1.414l-7 7a1 1 0 0 1-1.414 0l-3-3a1 1 0 1 1 1.414-1.414L6.5 11.086l6.293-6.293a1 1 0 0 1 1.414 0z"/></svg></div>
+<div class="suggested-meta">DACH Swing · +29.1% YTD</div>
+</div>
+<button class="btn btn-sm follow-suggested">Folgen</button>
+</div>
+</div>
+
+<div class="sidebar-card" style="background: linear-gradient(135deg, var(--info-soft), var(--purple-soft)); border-color: transparent;">
+<div class="sidebar-title">AVRG · ab 1.1.2027</div>
+<p style="font-size: 12px; line-height: 1.55; color: var(--text-muted); margin-bottom: 10px;">Was sich ändert, wenn das Altersvorsorgedepot startet — und ob es sich für dich lohnt. Erklärt, nicht verkauft.</p>
+<button class="btn btn-sm btn-primary" data-view="vorsorge" style="width: 100%; justify-content: center;">Lass es mir erklären →</button>
+</div>
+</aside>
+</div>
+</section>
+
+<!-- ============ DISCOVER VIEW ============ -->
+<section class="view" id="view-discover">
+
+<div class="v2-banner">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+Vision für V2 · Im MVP zeigen wir erst nur deine eigene Performance. Discover wird freigeschaltet, sobald wir ~500 verifizierte User haben.
+</div>
+
+<div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 12px;">
+<div>
+<h1 style="font-size: 22px; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 4px;">Trader entdecken</h1>
+<p style="font-size: 13px; color: var(--text-muted);">Nur verifizierte Accounts · Ranking innerhalb der eigenen Account-Größen-Klasse für faire Vergleiche</p>
+</div>
+</div>
+
+<div class="discover-controls">
+<div class="filter-chips">
+<button class="chip active" data-filter="all">Alle</button>
+<button class="chip" data-filter="swing">Swing</button>
+<button class="chip" data-filter="day">Day</button>
+<button class="chip" data-filter="options">Optionen</button>
+<button class="chip" data-filter="long">Long-Term</button>
+<button class="chip" data-filter="crypto">Krypto</button>
+<button class="chip" data-filter="fx">FX</button>
+<button class="chip" data-filter="vorsorge">Vorsorge</button>
+</div>
+<div class="sort-select-wrap">
+<button class="sort-select" id="sort-trigger">
+<span>Sortierung: <strong id="sort-current">Risiko-adj. Rendite</strong></span>
+<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+</button>
+<div class="sort-dropdown" id="sort-dropdown">
+<div class="sort-option active" data-sort="sharpe">Risiko-adj. Rendite (Sharpe)</div>
+<div class="sort-option" data-sort="ytd">YTD Rendite</div>
+<div class="sort-option" data-sort="dd">Niedrigster Drawdown</div>
+<div class="sort-option" data-sort="consistency">Konsistenz</div>
+<div class="sort-option" data-sort="newest">Neueste</div>
+</div>
+</div>
+</div>
+
+<div class="discover-grid" id="discover-grid"></div>
+</section>
+
+<!-- ============ VORSORGE VIEW ============ -->
+<section class="view" id="view-vorsorge">
+
+<div class="vorsorge-hero">
+<div>
+<span class="vorsorge-badge">AVRG · ab 1. Januar 2027</span>
+<h2>Vorsorge verstehen, nicht abschließen</h2>
+<p>Das Altersvorsorgereformgesetz wurde am 27. März 2026 vom Bundestag beschlossen. Ab 2027 kommt das Altersvorsorgedepot — ETF-fähig, ohne Beitragsgarantie-Pflicht. STrade erklärt dir, was sich für deine Situation ändert. Keine Provisionen, keine Vermittlung — nur Orientierung, damit du selbst entscheiden kannst.</p>
+</div>
+<button class="btn btn-primary btn-large" data-action="open-onboarding">Situation prüfen →</button>
+</div>
+
+<div class="vorsorge-grid">
+<div class="vorsorge-card" data-card="avd">
+<div class="vc-icon" style="background: var(--pos-soft); color: var(--pos);">📈</div>
+<div class="vc-title">Altersvorsorgedepot</div>
+<div class="vc-desc">Riester-Nachfolger ohne Beitragsgarantie. Bis 100% Aktienquote, Effektivkosten max. 1% p.a. beim Standardprodukt.</div>
+<div class="vc-stat">+30 ¢ <span style="font-size: 12px; color: var(--text-muted); font-weight: 400;">pro €</span></div>
+<div style="font-size: 11px; color: var(--text-dim); margin-top: 2px;">Förderung bis 1.200 €/Jahr</div>
+</div>
+
+<div class="vorsorge-card" data-card="fruehstart">
+<div class="vc-icon" style="background: var(--info-soft); color: var(--info);">👶</div>
+<div class="vc-title">Frühstart-Rente</div>
+<div class="vc-desc">10 € pro Monat staatlich für jedes Kind ab 6 Jahren. Erster Jahrgang: 2020. Anlage: ETF-Depot der Eltern-Wahl.</div>
+<div class="vc-stat">10 € <span style="font-size: 12px; color: var(--text-muted); font-weight: 400;">/Mo · Kind</span></div>
+<div style="font-size: 11px; color: var(--text-dim); margin-top: 2px;">Bis zu 1.440 € + Renditechance</div>
+</div>
+
+<div class="vorsorge-card" data-card="riester">
+<div class="vc-icon" style="background: var(--warn-soft); color: var(--warn);">🔄</div>
+<div class="vc-title">Riester-Wechsel</div>
+<div class="vc-desc">Bestand bleibt geschützt — aber lohnt sich der Wechsel ins neue System? Wir vergleichen mit deinen echten Daten.</div>
+<div class="vc-stat" style="font-size: 18px; color: var(--text-muted);">15 Mio<span style="font-size: 12px;"> aktive Verträge</span></div>
+<div style="font-size: 11px; color: var(--text-dim); margin-top: 2px;">Wechselrechner verfügbar</div>
+</div>
+</div>
+
+<div class="calc-card">
+<div class="card-title">Frühstart-Rente Renditerechner</div>
+<div class="card-subtitle">Was kann aus 10 €/Monat über die Jahre werden? Schieb die Werte und sieh's selbst.</div>
+
+<div class="calc-grid">
+<div class="calc-inputs">
+<div class="calc-input-row">
+<label>Aktuelles Alter des Kindes <span class="hint" id="calc-age-val">6 Jahre</span></label>
+<input type="range" id="calc-age" min="6" max="17" value="6" step="1"/>
+</div>
+<div class="calc-input-row">
+<label>Eltern-Aufstockung pro Monat <span class="hint" id="calc-extra-val">0 €</span></label>
+<input type="range" id="calc-extra" min="0" max="200" value="0" step="10"/>
+</div>
+<div class="calc-input-row">
+<label>Erwartete Rendite p.a. <span class="hint" id="calc-rate-val">6.0%</span></label>
+<input type="range" id="calc-rate" min="2" max="9" value="6" step="0.5"/>
+</div>
+<div class="calc-input-row">
+<label>Anlagedauer bis <span class="hint" id="calc-target-val">Renteneintritt (67)</span></label>
+<select id="calc-target">
+<option value="18">18 Jahre (Auszahlung)</option>
+<option value="25">25 Jahre (Studium-Ende)</option>
+<option value="40">40 Jahre (mittlere Lebensmitte)</option>
+<option value="67" selected>67 Jahre (Renteneintritt)</option>
+</select>
+</div>
+</div>
+
+<div class="calc-results">
+<div class="calc-result-main" id="calc-result">~36.140 €</div>
+<div class="calc-result-label" id="calc-result-label">Geschätztes Vermögen mit 67</div>
+
+<div class="calc-breakdown">
+<div class="cb-label">Staatlicher Zuschuss</div><div class="cb-value" id="cb-state">1.440 €</div>
+<div class="cb-label">Eigene Einzahlungen</div><div class="cb-value" id="cb-own">0 €</div>
+<div class="cb-label">Renditeertrag</div><div class="cb-value pos" id="cb-yield">~34.700 €</div>
+<div class="cb-label">Anlagedauer</div><div class="cb-value" id="cb-years">61 Jahre</div>
+</div>
+
+<div class="calc-chart">
+<svg viewBox="0 0 300 80" style="width: 100%; height: auto;">
+<defs>
+<linearGradient id="calcFill" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="var(--pos)" stop-opacity="0.3"/>
+<stop offset="100%" stop-color="var(--pos)" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<path id="calc-path-fill" d="" fill="url(#calcFill)"/>
+<path id="calc-path" d="" fill="none" stroke="var(--pos)" stroke-width="1.5"/>
+</svg>
+</div>
+</div>
+</div>
+
+<div style="margin-top: 18px; padding: 12px 14px; background: var(--surface-2); border-radius: 8px; font-size: 11px; color: var(--text-muted); line-height: 1.55;">
+<strong style="color: var(--text);">Hinweis:</strong> Vereinfachte Schätzung. Annahme: Kind 1.1.2020 oder später geboren, Zuschuss bis 18, danach Aufstockung optional. Tatsächliche Erträge schwanken. Steuern bei Auszahlung nicht berücksichtigt. Keine Anlageberatung.
+</div>
+</div>
+
+<div class="avrg-compare">
+<div class="card-title">Riester vs. Altersvorsorgedepot</div>
+<div class="card-subtitle">Was sich ab 2027 wirklich ändert</div>
+<table class="compare-table">
+<thead>
+<tr><th></th><th>Riester (alt)</th><th>Altersvorsorgedepot (neu)</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Beitragsgarantie</strong></td><td class="col-old">100% Pflicht</td><td class="col-new"><span class="compare-icon new">Optional</span> 0%, 80% oder 100%</td></tr>
+<tr><td><strong>Aktienquote</strong></td><td class="col-old">Stark begrenzt</td><td class="col-new"><span class="compare-icon new">Bis 100%</span> ETF-Sparpläne erlaubt</td></tr>
+<tr><td><strong>Förderung</strong></td><td class="col-old">175 € Grundzulage starr</td><td class="col-new"><span class="compare-icon new">Proportional</span> 30¢ pro € bis 1.200 €, dann 20¢</td></tr>
+<tr><td><strong>Max. Eigenbeitrag</strong></td><td class="col-old">2.100 € (4% Brutto-Lohn)</td><td class="col-new">1.800 €/Jahr förderfähig</td></tr>
+<tr><td><strong>Selbstständige</strong></td><td class="col-old">Nicht förderberechtigt</td><td class="col-new"><span class="compare-icon new">Berechtigt</span></td></tr>
+<tr><td><strong>Auszahlung</strong></td><td class="col-old">Lebenslange Rente Pflicht ab 85</td><td class="col-new"><span class="compare-icon new">Flexibel</span> Auszahlplan bis 85 möglich</td></tr>
+<tr><td><strong>Effektivkosten</strong></td><td class="col-old">Oft &gt;2% p.a.</td><td class="col-new"><span class="compare-icon new">Cap 1%</span> p.a. beim Standardprodukt</td></tr>
+<tr><td><strong>Standardprodukt</strong></td><td class="col-old">—</td><td class="col-new"><span class="compare-icon new">Pflicht</span> bei jedem Anbieter</td></tr>
+</tbody>
+</table>
+<div style="margin-top: 14px; padding: 12px; background: var(--info-soft); border-radius: 8px; font-size: 12px; color: var(--info); line-height: 1.6;">
+<strong>Was das für dich bedeuten kann:</strong> Wer jünger als 50 ist, kann ab 2027 vom Altersvorsorgedepot profitieren — vor allem wenn die Effektivkosten des bestehenden Riester über 1,5% p.a. liegen. Bestandsverträge bleiben in jedem Fall geschützt. Ob ein Wechsel sich lohnt, hängt von deinem konkreten Vertrag ab. Wir zeigen dir die Zahlen — entscheiden tust du.
+</div>
+</div>
+
+</section>
+
+<!-- ============ PRICING VIEW ============ -->
+<section class="view" id="view-pricing">
+
+<div class="pricing-hero">
+<h2>Bezahl nur für das, was du wirklich brauchst</h2>
+<p>STrade bleibt für die meisten kostenlos. Wer tiefere Analytics, Vorsorge-Tools oder den KI-Coach will, zahlt fair. Keine versteckten Kosten, keine Werbung in Plus oder höher, keine Datenverkäufe — nie.</p>
+
+<div class="billing-toggle">
+<button class="billing-btn active" data-billing="month">Monatlich</button>
+<button class="billing-btn" data-billing="year">Jährlich <span class="billing-saving">−25%</span></button>
+</div>
+</div>
+
+<div class="pricing-grid">
+
+<div class="pricing-card">
+<div class="pc-name">Free</div>
+<div class="pc-tagline">Für alle, die starten — ohne Verpflichtung</div>
+<div class="pc-price">
+<span class="pc-currency">€</span>
+<span class="pc-amount">0</span>
+<span class="pc-period">/Monat</span>
+</div>
+<div class="pc-billed">Für immer kostenlos</div>
+<button class="btn pc-cta">Aktiv</button>
+<div class="pc-features">
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>1 Broker-Verbindung (read-only)</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Verified-Badge & Trade-Tracking</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Basis-KPIs (Rendite, Win Rate)</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Feed, Discover, Profil</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Trade-Journal mit 1 Setup-Tag</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Vorsorge-Rechner</div>
+<div class="pc-feature muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Werbung im Feed</div>
+</div>
+</div>
+
+<div class="pricing-card featured">
+<div class="pricing-popular">BELIEBTESTE</div>
+<div class="pc-name">Plus</div>
+<div class="pc-tagline">Für aktive Trader, die ihre Edge messen wollen</div>
+<div class="pc-price">
+<span class="pc-currency">€</span>
+<span class="pc-amount" data-price-month="7.99" data-price-year="5.99">7,99</span>
+<span class="pc-period">/Monat</span>
+</div>
+<div class="pc-billed" data-billed-month="Monatlich kündbar" data-billed-year="71,88 € jährlich · 25% Rabatt">Monatlich kündbar</div>
+<button class="btn btn-primary pc-cta" data-action="upgrade-plus">Plus testen — 14 Tage gratis</button>
+<div class="pc-features">
+<div class="pc-section">Alles aus Free, plus:</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg><strong>Bis zu 5 Broker-Konten</strong></div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg><strong>KI-Coach: persönliche Insights</strong> in einfacher Sprache</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Volle Risiko-Metriken (Sharpe, Calmar, Sortino, Profit Factor)</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Setup-Tagging, R-Distribution, Expectancy</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Multi-Benchmark-Vergleich</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Vorsorge-Tracker (AVD + Frühstart)</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Steuer-Dashboard (Abgelt., Sparer-Pauschbetrag)</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Riester-Wechselrechner</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Werbefrei</div>
+</div>
+</div>
+
+<div class="pricing-card">
+<div class="pc-name">Pro</div>
+<div class="pc-tagline">Für Power-User mit komplexen Strategien & Beratung</div>
+<div class="pc-price">
+<span class="pc-currency">€</span>
+<span class="pc-amount" data-price-month="24.99" data-price-year="18.74">24,99</span>
+<span class="pc-period">/Monat</span>
+</div>
+<div class="pc-billed" data-billed-month="Monatlich kündbar" data-billed-year="224,88 € jährlich · 25% Rabatt">Monatlich kündbar</div>
+<button class="btn pc-cta" data-action="upgrade-pro">Pro freischalten</button>
+<div class="pc-features">
+<div class="pc-section">Alles aus Plus, plus:</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg><strong>Unbegrenzte Broker-Konten</strong></div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>X-Ray (Fonds-/ETF-Durchleuchtung)</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Backtest-Engine für eigene Setups</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Erweiterte Markt-Daten (CoT, Insider, SEC-Filings)</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Versicherungs-Aggregator (alle Verträge)</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Vorsorge-Anbieter-Vergleich mit Effektivkosten</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Priority Support</div>
+<div class="pc-feature"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>API-Zugang für eigene Auswertungen</div>
+</div>
+</div>
+
+</div>
+
+<div class="creator-program">
+<div>
+<h3>Creator-Programm</h3>
+<p>Du hast eine Community auf YouTube, Instagram oder TikTok? Mit dem STrade Creator-Programm bekommen deine Follower 1 Monat Plus gratis — und du verdienst pro Konversion. Transparent nach BaFin/ESMA-Standards mit Werbekennzeichnung. Ab 5.000 Followern bewerbungsfähig.</p>
+</div>
+<button class="btn btn-primary">Jetzt bewerben</button>
+</div>
+
+<div class="pricing-faq">
+<div class="card-title" style="margin-bottom: 14px;">Häufige Fragen</div>
+
+<div class="faq-item">
+<div class="faq-q">Warum gibt es kein Abo unter 5 €? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+<div class="faq-a">Weil wir keine Provisionen kassieren, keine Daten verkaufen und nicht an Vermittler vergüten. Wir nutzen keine Werbung in Plus oder Pro, integrieren echte Broker-APIs (was Lizenzen kostet) und finanzieren KI-Insights, die in einfacher Sprache erklären. 7,99 €/Monat ist der ehrliche Break-Even-Preis. Wer das nicht zahlen will, kann Free komplett nutzen — nur ohne Coach und Tiefen-Analytics.</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-q">Was passiert bei Free, wenn ich keine Broker-API verbinde? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+<div class="faq-a">Du bekommst alle Read-Only-Funktionen ohne Verifikations-Badge. Du kannst Posts lesen und liken, aber selber keine Trades posten — denn ohne Verifizierung wäre das Stocktwits, und das willst du nicht.</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-q">Kann ich jederzeit kündigen oder downgraden? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+<div class="faq-a">Ja. Monatlich gebuchte Abos sind monatlich kündbar. Jahresabos enden automatisch nach 12 Monaten und werden nur verlängert, wenn du es willst. Daten und Trade-History bleiben dir auch nach Downgrade erhalten — nur Premium-Features sind dann gesperrt.</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-q">Werden meine Trade-Daten an Anbieter weitergegeben? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+<div class="faq-a">Nein. Anonymisierte Aggregate (z. B. „142 Trader haben diese Strategie geführt") nutzen wir für Discovery — aber nie identifizierbare individuelle Trades. Pro-Tier-User bekommen sogar einen exklusiven Privacy-Modus, der Performance erst mit 30 Tagen Verzögerung publiziert.</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-q">Welche Broker werden unterstützt? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+<div class="faq-a">Aktuell: Interactive Brokers (offizielle API), Trade Republic (via pytr), Scalable Capital, Comdirect, Consorsbank. Für Krypto: Binance, Kraken, Bitpanda. Mit FIDA (EU-Open-Finance ab 2026) erweitern wir kontinuierlich.</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-q">Was ist mit dem Altersvorsorgedepot? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+<div class="faq-a">Sobald das AVRG am 1. Januar 2027 in Kraft tritt, integrieren wir die wichtigsten Anbieter direkt. Plus-Nutzer sehen ihre AVD-Performance, Förderung und Effektivkosten in einem Dashboard. Pro-Nutzer bekommen den Anbieter-Vergleich.</div>
+</div>
+</div>
+
+</section>
+
+</main>
+
+<!-- ONBOARDING MODAL -->
+<div class="modal-overlay" id="onboarding-modal">
+<div class="modal">
+<button class="modal-close" data-action="close-onboarding">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+</button>
+<div class="modal-content">
+
+<div class="step-indicator">
+<div class="step-dot active" data-step-dot="1"></div>
+<div class="step-dot" data-step-dot="2"></div>
+<div class="step-dot" data-step-dot="3"></div>
+<div class="step-dot" data-step-dot="4"></div>
+</div>
+
+<div class="modal-step active" data-step="1">
+<h3>Willkommen bei STrade</h3>
+<p class="modal-subtitle">Eine Plattform für finanziell interessierte Menschen — keine Influencer mit Fake-Screenshots, kein Verkauf, keine Vermittlung. Wir verbinden deinen Broker (read-only), zeigen deinen echten Fortschritt und lassen dich fair vergleichen. Du kannst alles später ändern.</p>
+<div style="background: var(--surface-2); border-radius: 10px; padding: 16px; font-size: 12px; line-height: 1.7; color: var(--text-muted); margin-bottom: 16px;">
+<div style="display: flex; gap: 10px; align-items: center; margin-bottom: 6px;"><span style="color: var(--pos);">✓</span> Read-Only-Zugang — wir können nichts kaufen oder verkaufen</div>
+<div style="display: flex; gap: 10px; align-items: center; margin-bottom: 6px;"><span style="color: var(--pos);">✓</span> Daten verschlüsselt in DE-Rechenzentrum</div>
+<div style="display: flex; gap: 10px; align-items: center;"><span style="color: var(--pos);">✓</span> Du kannst jederzeit alles löschen</div>
+</div>
+<div class="modal-actions">
+<div></div>
+<button class="btn btn-primary" data-action="next-step">Los geht's →</button>
+</div>
+</div>
+
+<div class="modal-step" data-step="2">
+<h3>Wähle deinen Broker</h3>
+<p class="modal-subtitle">STrade verbindet sich nur lesend. Wir importieren Trades und Performance, aber können keine Order auslösen. Du kannst später weitere Konten hinzufügen.</p>
+<div class="broker-list">
+<div class="broker-card" data-broker="ibkr">
+<div class="broker-logo" style="background: #c00; color: white;">IBKR</div>
+<div><div class="broker-name">Interactive Brokers</div><div class="broker-meta">Offizielle API · Empfohlen</div></div>
+</div>
+<div class="broker-card" data-broker="tr">
+<div class="broker-logo" style="background: #000; color: #fff;">TR</div>
+<div><div class="broker-name">Trade Republic</div><div class="broker-meta">via pytr · Beta</div></div>
+</div>
+<div class="broker-card" data-broker="scalable">
+<div class="broker-logo" style="background: #1d4ed8; color: white;">SC</div>
+<div><div class="broker-name">Scalable Capital</div><div class="broker-meta">Banking-API</div></div>
+</div>
+<div class="broker-card" data-broker="comdirect">
+<div class="broker-logo" style="background: #ffd900; color: #1c1917;">CD</div>
+<div><div class="broker-name">Comdirect</div><div class="broker-meta">PSD2-API</div></div>
+</div>
+<div class="broker-card" data-broker="kraken">
+<div class="broker-logo" style="background: #5741d9; color: white;">KR</div>
+<div><div class="broker-name">Kraken</div><div class="broker-meta">Krypto · Read-only</div></div>
+</div>
+<div class="broker-card" data-broker="other">
+<div class="broker-logo" style="background: var(--surface-3); color: var(--text-muted);">+</div>
+<div><div class="broker-name">Anderer Broker</div><div class="broker-meta">CSV-Import</div></div>
+</div>
+</div>
+<div class="modal-actions">
+<button class="btn" data-action="prev-step">← Zurück</button>
+<button class="btn btn-primary" data-action="next-step" id="step2-next" disabled>Weiter</button>
+</div>
+</div>
+
+<div class="modal-step" data-step="3">
+<h3>Was beschreibt dich am besten?</h3>
+<p class="modal-subtitle">Hilft uns, dir die richtige Discovery, Peer-Group und Vergleiche zu zeigen. Du kannst mehrere wählen.</p>
+<div class="strategy-list">
+<div class="strategy-card" data-strategy="swing">
+<div class="strategy-icon" style="background: var(--info-soft);">📈</div>
+<div class="strategy-info"><div class="strategy-name">Swing-Trader</div><div class="strategy-desc">Tage bis Wochen halten, Setups handeln</div></div>
+</div>
+<div class="strategy-card" data-strategy="day">
+<div class="strategy-icon" style="background: var(--neg-soft);">⚡</div>
+<div class="strategy-info"><div class="strategy-name">Day-Trader</div><div class="strategy-desc">Intraday, hohe Frequenz</div></div>
+</div>
+<div class="strategy-card" data-strategy="long">
+<div class="strategy-icon" style="background: var(--pos-soft);">🌳</div>
+<div class="strategy-info"><div class="strategy-name">Long-Term-Investor</div><div class="strategy-desc">ETFs, Quality, Buy-and-Hold</div></div>
+</div>
+<div class="strategy-card" data-strategy="options">
+<div class="strategy-icon" style="background: var(--accent-soft);">🎯</div>
+<div class="strategy-info"><div class="strategy-name">Optionen</div><div class="strategy-desc">Income-Strategien oder direktional</div></div>
+</div>
+<div class="strategy-card" data-strategy="vorsorge">
+<div class="strategy-icon" style="background: var(--purple-soft);">🌱</div>
+<div class="strategy-info"><div class="strategy-name">Vorsorge-Sparer</div><div class="strategy-desc">AVD, Riester, ETF-Sparpläne</div></div>
+</div>
+</div>
+<div class="modal-actions">
+<button class="btn" data-action="prev-step">← Zurück</button>
+<button class="btn btn-primary" data-action="next-step" id="step3-next" disabled>Weiter</button>
+</div>
+</div>
+
+<div class="modal-step" data-step="4">
+<h3>Fertig! Eine letzte Sache.</h3>
+<p class="modal-subtitle">Du startest auf dem Free-Plan. 14 Tage Plus gratis testen — kein Kreditkarten-Eintrag nötig, läuft automatisch aus, falls du nichts machst.</p>
+
+<div style="background: linear-gradient(135deg, var(--info-soft), var(--purple-soft)); border-radius: 12px; padding: 20px; margin-bottom: 16px;">
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+<span style="font-size: 20px;">✨</span>
+<span style="font-size: 14px; font-weight: 500;">Plus 14 Tage gratis</span>
+</div>
+<ul style="list-style: none; font-size: 12px; color: var(--text-muted); line-height: 1.8;">
+<li>✓ Volle Risiko-Metriken & Setup-Analyse</li>
+<li>✓ Vorsorge-Tracker mit AVRG-Modul</li>
+<li>✓ Steuer-Dashboard und Riester-Wechselrechner</li>
+<li>✓ Werbefrei</li>
+</ul>
+</div>
+
+<div class="modal-actions">
+<button class="btn" data-action="prev-step">← Zurück</button>
+<div style="display: flex; gap: 8px;">
+<button class="btn" data-action="finish-onboarding">Mit Free starten</button>
+<button class="btn btn-primary" data-action="finish-onboarding-plus">14 Tage Plus testen</button>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- TOOLTIP -->
+<div class="tooltip-content" id="verified-tooltip" style="position: absolute;">
+<div style="font-weight: 500; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+<svg width="12" height="12" viewBox="0 0 16 16" fill="var(--pos)"><path d="M14.207 4.793a1 1 0 0 1 0 1.414l-7 7a1 1 0 0 1-1.414 0l-3-3a1 1 0 1 1 1.414-1.414L6.5 11.086l6.293-6.293a1 1 0 0 1 1.414 0z"/></svg>
+Verifikation
+</div>
+<div class="tt-row"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M14.207 4.793a1 1 0 0 1 0 1.414l-7 7a1 1 0 0 1-1.414 0l-3-3a1 1 0 1 1 1.414-1.414L6.5 11.086l6.293-6.293a1 1 0 0 1 1.414 0z"/></svg>Read-only-API zu <strong>IBKR</strong></div>
+<div class="tt-row"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M14.207 4.793a1 1 0 0 1 0 1.414l-7 7a1 1 0 0 1-1.414 0l-3-3a1 1 0 1 1 1.414-1.414L6.5 11.086l6.293-6.293a1 1 0 0 1 1.414 0z"/></svg>Trades vom Broker, nicht selbst eingegeben</div>
+<div class="tt-row"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M14.207 4.793a1 1 0 0 1 0 1.414l-7 7a1 1 0 0 1-1.414 0l-3-3a1 1 0 1 1 1.414-1.414L6.5 11.086l6.293-6.293a1 1 0 0 1 1.414 0z"/></svg>Echtgeld-Konto, kein Paper-Trading</div>
+<div class="tt-row"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M14.207 4.793a1 1 0 0 1 0 1.414l-7 7a1 1 0 0 1-1.414 0l-3-3a1 1 0 1 1 1.414-1.414L6.5 11.086l6.293-6.293a1 1 0 0 1 1.414 0z"/></svg>Verifiziert seit März 2024</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<nav class="mobile-nav">
+<button class="mnav-btn" data-view="profile">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+<span>Profil</span>
+</button>
+<button class="mnav-btn active" data-view="feed">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h18M3 12h18M3 19h12"/></svg>
+<span>Feed</span>
+</button>
+<button class="mnav-btn" data-view="discover">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+<span>Discover</span>
+</button>
+<button class="mnav-btn" data-view="vorsorge">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+<span>Vorsorge</span>
+</button>
+<button class="mnav-btn" data-view="pricing">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+<span>Plan</span>
+</button>
+</nav>
+
+<footer>
+<div class="footer-inner">
+<div class="disclaimer">
+<strong style="color: var(--text-muted);">Risikohinweis:</strong> Vergangene Performance prognostiziert keine zukünftige. Alle Daten dienen Bildung und Information, keine Anlageberatung. Trading birgt erhebliches Verlustrisiko. Renditen nach Broker-Provisionen aber vor Steuern, sofern nicht anders angegeben. Hinweise zum AVRG basieren auf dem Bundestags-Beschluss vom 27.03.2026 und können sich ändern.
+</div>
+<div style="font-family: 'Geist Mono'; opacity: 0.6;">STrade · v0.6 mockup</div>
+</div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+  const $=(s,c)=>(c||document).querySelector(s);
+  const $$=(s,c)=>Array.from((c||document).querySelectorAll(s));
+
+  const SK='strade-v6-state';
+  const def={onboarded:false,plan:'free',follows:{},likes:{},likeCounts:{},bookmarks:{},comments:{},selectedBroker:null,selectedStrategies:[],benchmark:'DAX',range:'YTD',sortBy:'sharpe',feedFilter:'following',discoverFilter:'all',tradeFilter:'90d',tradeSort:{col:'date',asc:false},billingPeriod:'month',onboardStep:1,skillLevel:'intermediate'};
+  let state;
+  try{const r=localStorage.getItem(SK);state=r?Object.assign({},def,JSON.parse(r)):Object.assign({},def);}catch(e){state=Object.assign({},def);}
+  const save=()=>{try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){}};
+
+  function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('visible');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('visible'),2400);}
+
+  // ===== CHART =====
+  const perf={'1M':{ret:5.2,sharpe:1.42,sortino:1.95,calmar:2.80,dd:-1.9,ddDate:'14. Apr',recovery:3,pf:1.62,winRate:64,avgR:1.3,peerRank:18},'3M':{ret:11.4,sharpe:1.65,sortino:2.18,calmar:3.35,dd:-3.4,ddDate:'2. März',recovery:8,pf:1.78,winRate:62,avgR:1.35,peerRank:14},'6M':{ret:22.6,sharpe:1.71,sortino:2.32,calmar:3.71,dd:-6.1,ddDate:'18. Dez',recovery:14,pf:1.91,winRate:60,avgR:1.4,peerRank:11},'YTD':{ret:34.2,sharpe:1.78,sortino:2.41,calmar:3.52,dd:-9.7,ddDate:'Aug 2025',recovery:23,pf:2.04,winRate:61,avgR:1.4,peerRank:12},'1Y':{ret:42.8,sharpe:1.61,sortino:2.18,calmar:3.48,dd:-12.3,ddDate:'Aug 2025',recovery:23,pf:1.87,winRate:59,avgR:1.35,peerRank:14},'ALL':{ret:118.4,sharpe:1.45,sortino:1.96,calmar:2.14,dd:-18.6,ddDate:'Okt 2024',recovery:41,pf:1.71,winRate:58,avgR:1.3,peerRank:16}};
+  const bench={'DAX':{'1M':1.8,'3M':4.2,'6M':8.1,'YTD':12.4,'1Y':15.1,'ALL':38.6},'MSCI World':{'1M':2.1,'3M':5.4,'6M':9.8,'YTD':14.2,'1Y':16.8,'ALL':42.1},'S&P 500':{'1M':2.4,'3M':6.1,'6M':10.5,'YTD':15.6,'1Y':18.2,'ALL':45.8},'NASDAQ-100':{'1M':3.2,'3M':7.8,'6M':12.3,'YTD':18.4,'1Y':22.6,'ALL':56.4},'Cash':{'1M':0.3,'3M':0.9,'6M':1.8,'YTD':3.1,'1Y':3.7,'ALL':7.2}};
+  const fmt=(n)=>(n>=0?'+':'')+n.toFixed(1)+'%';
+
+  function genChart(r,bn){
+    const dl={'1M':['W1','W2','W3','W4'],'3M':['Feb','März','Apr'],'6M':['Nov','Dez','Jan','Feb','März','Apr'],'YTD':['Jan','Feb','März','Apr','Mai'],'1Y':['Mai','Jul','Sep','Nov','Jan','März','Mai'],'ALL':['März 24','Jul 24','Nov 24','März 25','Jul 25','Nov 25','März 26']};
+    const p=perf[r],bt=bench[bn][r],pts=24,u=[],b=[];
+    const sd=r.charCodeAt(0)+bn.charCodeAt(0);
+    for(let i=0;i<=pts;i++){
+      const t=i/pts,n=Math.sin(sd*(i+1)*0.7)*0.6+Math.cos(sd*(i+1)*1.3)*0.4;
+      const uv=p.ret*t+n*Math.abs(p.dd)*0.4,bv=bt*t+n*1.2;
+      const x=i*(800/pts);
+      u.push({x,y:Math.max(10,Math.min(180,120-uv*2.5)),value:uv,date:dl[r][Math.floor(i/pts*(dl[r].length-1))]});
+      b.push({x,y:Math.max(10,Math.min(180,120-bv*2.5)),value:bv});
+    }
+    u[pts].value=p.ret;u[pts].y=Math.max(10,Math.min(180,120-p.ret*2.5));
+    b[pts].value=bt;b[pts].y=Math.max(10,Math.min(180,120-bt*2.5));
+    return {u,b};
+  }
+  const pp=p=>p.map((q,i)=>(i===0?'M':'L')+q.x.toFixed(1)+' '+q.y.toFixed(1)).join(' ');
+  const fpath=p=>{const t=pp(p),l=p[p.length-1],f=p[0];return t+` L ${l.x.toFixed(1)} 200 L ${f.x.toFixed(1)} 200 Z`;};
+  let cur=null;
+
+  function setRange(r){
+    state.range=r;save();
+    const pd=perf[r];cur=genChart(r,state.benchmark);
+    $('#chart-user').setAttribute('d',pp(cur.u));
+    $('#chart-bench').setAttribute('d',pp(cur.b));
+    $('#chart-fill').setAttribute('d',fpath(cur.u));
+    $('#kpi-return').textContent=fmt(pd.ret);
+    $('#kpi-return').className='kpi-value '+(pd.ret>=0?'pos':'neg');
+    const bv=bench[state.benchmark][r];
+    $('#kpi-return-meta').textContent=`vs ${state.benchmark} ${fmt(bv)} · TWR`;
+    $('#kpi-calmar').textContent=pd.calmar.toFixed(2);
+    $('#kpi-calmar-meta').textContent=`Sharpe ${pd.sharpe.toFixed(2)} · Sortino ${pd.sortino.toFixed(2)}`;
+    $('#kpi-pf').textContent=pd.pf.toFixed(2);
+    $('#kpi-pf-meta').textContent=`Win Rate ${pd.winRate}% · Ø R ${pd.avgR.toFixed(1)}`;
+    $('#kpi-dd').textContent=fmt(pd.dd);
+    $('#kpi-dd-meta').textContent=`${pd.ddDate} · ${pd.recovery}d Recovery`;
+    $('#legend-user').textContent=fmt(pd.ret);
+    $('#legend-bench').textContent=fmt(bv);
+    $('#legend-bench-name').textContent=state.benchmark;
+    $('#peer-rank').textContent=pd.peerRank;
+    $('#bench-current').textContent='vs '+state.benchmark;
+    $$('.range-btn').forEach(b=>b.classList.toggle('active',b.dataset.range===r));
+  }
+
+  // ===== TRADES =====
+  const trades=[
+    {date:'2026-04-22',ticker:'NVDA',setup:'PB',side:'Long',hold:14,size:3,r:1.4,ret:8.4},
+    {date:'2026-04-19',ticker:'SAP',setup:'BO',side:'Long',hold:41,size:5,r:2.2,ret:12.1},
+    {date:'2026-04-16',ticker:'TSLA',setup:'EV',side:'Long',hold:6,size:2,r:-1.0,ret:-4.2},
+    {date:'2026-04-13',ticker:'SPY 460C',setup:'OPT',side:'Long',hold:3,size:1,r:1.0,ret:22.7},
+    {date:'2026-04-08',ticker:'AMD',setup:'PB',side:'Long',hold:9,size:3,r:1.6,ret:9.8},
+    {date:'2026-04-05',ticker:'MSFT',setup:'BO',side:'Long',hold:22,size:4,r:1.9,ret:7.6},
+    {date:'2026-04-02',ticker:'RHM',setup:'PB',side:'Long',hold:18,size:3,r:-0.7,ret:-3.1},
+    {date:'2026-03-28',ticker:'ASML',setup:'BO',side:'Long',hold:31,size:4,r:2.5,ret:14.2},
+    {date:'2026-03-25',ticker:'QQQ 380P',setup:'OPT',side:'Long',hold:2,size:1,r:-1.0,ret:-18.4},
+    {date:'2026-03-20',ticker:'SIE',setup:'PB',side:'Long',hold:15,size:4,r:1.3,ret:6.9},
+    {date:'2026-03-12',ticker:'AAPL',setup:'PB',side:'Long',hold:8,size:3,r:0.8,ret:4.6},
+    {date:'2026-03-05',ticker:'GOOGL',setup:'BO',side:'Long',hold:28,size:4,r:2.0,ret:11.2}
+  ];
+
+  function renderTrades(){
+    let f=[...trades];
+    if(state.tradeFilter==='wins')f=f.filter(t=>t.r>0);
+    else if(state.tradeFilter==='losses')f=f.filter(t=>t.r<0);
+    const{col,asc}=state.tradeSort;
+    f.sort((a,b)=>{let av=a[col],bv=b[col];if(col==='date'){av=new Date(av);bv=new Date(bv);}if(av<bv)return asc?-1:1;if(av>bv)return asc?1:-1;return 0;});
+    $('#trades-tbody').innerHTML=f.map(t=>`<tr><td class="mono" style="color:var(--text-muted);">${t.date}</td><td>${t.ticker}</td><td><span class="setup-tag">${t.setup}</span></td><td>${t.side}</td><td class="right mono">${t.hold}d</td><td class="right mono">${t.size}%</td><td class="right"><span class="r-mult ${t.r>0?'r-pos':'r-neg'}">${t.r>0?'+':''}${t.r.toFixed(1)}R</span></td><td class="right ${t.ret>0?'pos':'neg'} mono">${t.ret>0?'+':''}${t.ret.toFixed(1)}%</td></tr>`).join('');
+    $$('#trades-table th').forEach(th=>{th.classList.remove('sorted','asc');if(th.dataset.sort===col){th.classList.add('sorted');if(asc)th.classList.add('asc');}});
+    $$('[data-trade-filter]').forEach(c=>c.classList.toggle('active',c.dataset.tradeFilter===state.tradeFilter));
+  }
+
+  // ===== FEED =====
+  // Helper: build mini-chart SVG path for a trade (entry → exit shape)
+  function miniChart(positive, intensity){
+    // 60 width, 56 height. Positive = upward S-curve. Negative = downward.
+    const pts=[];
+    const n=20;
+    const seed=intensity||1;
+    for(let i=0;i<=n;i++){
+      const t=i/n;
+      const noise=Math.sin(seed*(i+1)*1.3)*4+Math.cos(seed*(i+2)*0.7)*2.5;
+      const trend=positive?(28-t*20):(28+t*20);
+      pts.push({x:t*100,y:Math.max(6,Math.min(50,trend+noise))});
+    }
+    const path=pts.map((p,i)=>(i===0?'M':'L')+p.x.toFixed(1)+' '+p.y.toFixed(1)).join(' ');
+    const last=pts[pts.length-1];
+    const fill=path+` L ${last.x.toFixed(1)} 56 L 0 56 Z`;
+    const color=positive?'var(--pos)':'var(--neg)';
+    const fillColor=positive?'rgba(52,211,153,0.15)':'rgba(248,113,113,0.15)';
+    return `<svg class="at-chart" viewBox="0 0 100 56" preserveAspectRatio="none">
+      <path d="${fill}" fill="${fillColor}"/>
+      <path d="${path}" stroke="${color}" stroke-width="1.5" fill="none"/>
+      <circle cx="0" cy="${pts[0].y.toFixed(1)}" r="2" fill="${color}" opacity="0.6"/>
+      <circle cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="2.5" fill="${color}"/>
+    </svg>`;
+  }
+
+  // Activity-style feed posts (reordered, trades have charts, achievements as pills)
+  const posts=[
+    {id:'sys-recap',type:'recap',time:'vor 30 Min.',tags:['following','all','strategies']},
+    {id:'p1',type:'activity',author:'Lukas K.',initials:'LK',ab:'rgba(96,165,250,0.2)',ac:'var(--info)',v:true,streak:15,action:'hat einen Long-Pullback geschlossen',time:'vor 2 Std.',body:'Teilgewinne vor Earnings, Runner getrailt. Hyperscaler-Capex-Thesis hat gehalten — sauberster Setup des Monats.',trade:{ticker:'NVDA',strat:'Long · Pullback 21-EMA',pct:8.4,positive:true,stats:[['Hold','14d'],['R','+1.4'],['Size','3%'],['Peer','Top 12%']]},pills:[{c:'discipline',t:'✓ Stop respektiert'},{c:'r-mult',t:'+1.4R'},{c:'peer',t:'Top 12%'}],kudos:24,kudosNames:['SW','MT','AB'],comments:7,tags:['following','all','strategies']},
+    {id:'sys-ach1',type:'achievement',author:'Sara W.',initials:'SW',ab:'rgba(248,113,113,0.2)',ac:'var(--neg)',badge:'Tide Rider',badgeIcon:'🌊',time:'vor 3 Std.',body:'3 Monate in Folge positiv',tags:['following','all']},
+    {id:'p2',type:'activity',author:'Sara W.',initials:'SW',ab:'rgba(248,113,113,0.2)',ac:'var(--neg)',v:true,streak:32,action:'YTD-Hoch · Monatsrückblick',time:'vor 3 Std.',body:'Vor allem Small-Cap Biotech-Swings dieses Quartal. Konzentration zahlt sich aus, aber das Drawdown-Risiko hält mich nachts wach. Ø Position von 6% auf 4% reduziert.',trade:{ticker:'YTD Performance',strat:'47 Trades · 71% Win Rate',pct:47.3,positive:true,stats:[['Sharpe','2.10'],['Max DD','−12.4%'],['Ø R','+1.7'],['Peer','Top 4%']]},pills:[{c:'badge',t:'🌊 Tide Rider'},{c:'peer',t:'Top 4%'},{c:'streak',t:'🔥 32d Streak'}],kudos:86,kudosNames:['LK','MT','DV'],comments:19,tags:['following','all']},
+    {id:'sys-comp',type:'compare',time:'vor 4 Std.',tags:['following','all']},
+    {id:'p3',type:'activity',author:'Marcus T.',initials:'MT',ab:'rgba(52,211,153,0.2)',ac:'var(--pos)',v:true,streak:8,action:'EUR/USD Short eröffnet · Makro',time:'vor 5 Std.',body:'EZB dovish auf der PK, Fed weiter geduldig. Spread weitet sich vor NFP. Position bewusst kleiner wegen Event-Risiko — volle Größe wenn 1.0680 nachhaltig fällt.',trade:null,pills:[{c:'discipline',t:'✓ Sizing reduziert'}],kudos:12,kudosNames:['LK','SW'],comments:4,tags:['following','all']},
+    {id:'p5',type:'activity',author:'Frau Finanzen',initials:'FF',ab:'rgba(212,163,115,0.2)',ac:'var(--accent)',v:true,streak:127,action:'AVRG-Update · Empfehlung',time:'vor 6 Std.',body:'Bundestag hat das Altersvorsorgereformgesetz beschlossen. Ab 1.1.2027 kommt das Altersvorsorgedepot — endlich ETF-fähig, ohne Beitragsgarantie-Pflicht. Riester-Bestände bleiben geschützt, aber für junge Sparer lohnt sich oft der Wechsel.',trade:null,pills:[{c:'badge',t:'📓 Mentor'}],kudos:152,kudosNames:['LK','SW','DV'],comments:34,tags:['all','vorsorge','discoveries']},
+    {id:'p4',type:'activity',author:'Anna B.',initials:'AB',ab:'rgba(167,139,250,0.2)',ac:'var(--purple)',v:true,streak:6,action:'Stop ausgelöst · Verlust-Reflexion',time:'gestern',body:'Thesis war falsch beim Services-Wachstum. Stop respektiert, kleiner Verlust, weiter geht\'s. Win Rate diesen Monat 58% — nervig, aber erwartete Varianz. Setups sind weiter qualitativ.',trade:{ticker:'AAPL',strat:'Long · Mean Reversion',pct:-2.1,positive:false,stats:[['Hold','4d'],['R','−0.8'],['Size','3%'],['Peer','Top 18%']]},pills:[{c:'discipline',t:'✓ Stop respektiert'},{c:'r-mult',t:'−0.8R'}],kudos:41,kudosNames:['LK','SW','MT'],comments:11,tags:['following','all']},
+    {id:'p6',type:'activity',author:'Daniel V.',initials:'DV',ab:'rgba(96,165,250,0.2)',ac:'var(--info)',v:true,streak:62,action:'Quartals-Sparplan-Update',time:'vor 8 Std.',body:'Stur weiter MSCI World + Stoxx Europe 600 Quality. Q1 lief, Q2 startet — nicht eingreifen. Größter Drawdown YTD: −2.8%. Genau dafür mache ich das.',trade:{ticker:'Sparplan-Performance',strat:'ETF Buy-and-Hold',pct:14.8,positive:true,stats:[['YTD','+14.8%'],['Sharpe','2.05'],['DD','−2.8%'],['Peer','Top 8%']]},pills:[{c:'discipline',t:'✓ Plan halten'},{c:'peer',t:'Top 8%'},{c:'streak',t:'🔥 62d Streak'}],kudos:67,kudosNames:['LK','SW'],comments:8,tags:['all','discoveries']},
+    {id:'p7',type:'activity',author:'Jonas P.',initials:'JP',ab:'rgba(212,163,115,0.2)',ac:'var(--accent)',v:true,streak:21,action:'Wheel-Strategie · April-Rückblick',time:'gestern',body:'Cash-Secured Puts auf MSFT, GOOGL, BRK-B. Alle expired worthless, 1.4% Premium auf Buch. Nicht spektakulär, aber stetig. Wheel ist Disziplin, nicht Excitement.',trade:{ticker:'April Wheel-Cycle',strat:'CSP + Covered Call',pct:1.4,positive:true,stats:[['Trades','12'],['Expired','92%'],['Premium','1.4%'],['Streak','21d']]},pills:[{c:'discipline',t:'✓ Plan halten'},{c:'streak',t:'🔥 21d Streak'}],kudos:28,kudosNames:['DV','MT'],comments:6,tags:['all','discoveries']}
+  ];
+
+  function renderActivity(p){
+    const lk=state.likes[p.id],bm=state.bookmarks[p.id];
+    const lc=state.likeCounts[p.id]!==undefined?state.likeCounts[p.id]:(p.kudos+(lk?1:0));
+    const cl=state.comments[p.id]||[];
+    const pillsHtml=(p.pills||[]).map(pl=>`<span class="ach-pill ${pl.c}">${pl.t}</span>`).join('');
+    const kudosStack=(p.kudosNames||[]).slice(0,3).map((n,i)=>`<div class="ka" style="background:${i===0?'rgba(96,165,250,0.3)':i===1?'rgba(167,139,250,0.3)':'rgba(212,163,115,0.3)'};color:var(--text);">${n}</div>`).join('');
+    const others=lc-(p.kudosNames||[]).length;
+    return `<div class="activity" data-post-id="${p.id}">
+      <div class="activity-header">
+        <div class="activity-avatar" style="background:${p.ab};color:${p.ac};">${p.initials}${p.streak?`<span class="activity-streak-badge">${p.streak}d</span>`:''}</div>
+        <div class="activity-meta">
+          <div class="activity-author">${p.author} ${p.v?'<span class="verified-badge"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M14.207 4.793a1 1 0 0 1 0 1.414l-7 7a1 1 0 0 1-1.414 0l-3-3a1 1 0 1 1 1.414-1.414L6.5 11.086l6.293-6.293a1 1 0 0 1 1.414 0z"/></svg></span>':''}</div>
+          <div class="activity-action">${p.action}</div>
+          <div class="activity-time">${p.time}</div>
+        </div>
+      </div>
+      ${pillsHtml?`<div class="achievement-pills">${pillsHtml}</div>`:''}
+      <div class="activity-body">${p.body}</div>
+      ${p.trade?`<div class="activity-trade">
+        <div class="at-header">
+          <div><div class="at-ticker">${p.trade.ticker}</div><div class="at-strat">${p.trade.strat}</div></div>
+          <div class="at-pct ${p.trade.positive?'pos':'neg'}">${p.trade.pct>=0?'+':''}${p.trade.pct.toFixed(1)}%</div>
+        </div>
+        ${miniChart(p.trade.positive,p.id.charCodeAt(1)||1)}
+        <div class="at-stats">${p.trade.stats.map(s=>`<div class="at-stat"><div class="at-stat-label">${s[0]}</div><div class="at-stat-val">${s[1]}</div></div>`).join('')}</div>
+      </div>`:''}
+      <div class="activity-actions">
+        <button class="kudos-btn ${lk?'given':''}" data-action="like" data-post="${p.id}" title="Kudos geben">
+          <svg viewBox="0 0 24 24" fill="${lk?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+          <span>${lc}</span>
+        </button>
+        <button class="kudos-btn" data-action="comment-toggle" data-post="${p.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> ${p.comments+cl.length}</button>
+        <button class="kudos-btn" data-action="share" data-post="${p.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+        <button class="kudos-btn ${bm?'given':''}" data-action="bookmark" data-post="${p.id}"><svg viewBox="0 0 24 24" fill="${bm?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+        ${kudosStack?`<div class="kudos-stack"><div class="kudos-avatars">${kudosStack}</div>${others>0?`+${others} weitere haben Kudos gegeben`:'haben Kudos gegeben'}</div>`:''}
+      </div>
+      <div class="comments" data-comments="${p.id}">${cl.map(c=>`<div class="comment"><div class="avatar-md" style="background:rgba(96,165,250,0.2);color:var(--info);">M</div><div class="comment-body"><span class="comment-author">Du</span>${c.text}<div class="comment-time">${c.time}</div></div></div>`).join('')}<div class="comment-input"><input type="text" placeholder="Kommentar schreiben…" data-comment-input="${p.id}"/><button class="btn btn-primary btn-sm" data-action="submit-comment" data-post="${p.id}">Senden</button></div></div>
+    </div>`;
+  }
+
+  function renderRecap(){
+    return `<div class="system-post recap">
+      <div class="sp-header">
+        <div class="sp-icon" style="background:var(--purple-soft);color:var(--purple);">✦</div>
+        <div><div class="sp-title">Deine Woche im Überblick</div><div class="sp-subtitle">22.–28. April · automatisch generiert</div></div>
+      </div>
+      <div class="sp-recap-stats">
+        <div class="sp-stat"><div class="sp-stat-label">Trades</div><div class="sp-stat-val">8</div></div>
+        <div class="sp-stat"><div class="sp-stat-label">Rendite</div><div class="sp-stat-val pos">+4.2%</div></div>
+        <div class="sp-stat"><div class="sp-stat-label">Disziplin</div><div class="sp-stat-val">87/100</div></div>
+        <div class="sp-stat"><div class="sp-stat-label">Streak</div><div class="sp-stat-val">15d 🔥</div></div>
+      </div>
+      <div class="sp-recap-insight"><strong>Konsistente Sizing-Disziplin diese Woche.</strong> Du hast keine Position über 5% genommen und in 7 von 8 Trades den initialen Stop respektiert. Das ist genau der Grund, warum dein Health Score von 76 auf 82 gestiegen ist.</div>
+      <div style="margin-top:12px;display:flex;gap:8px;"><button class="btn btn-sm" data-view="profile">Detail-Stats →</button></div>
+    </div>`;
+  }
+
+  function renderAchievement(p){
+    return `<div class="system-post achievement">
+      <div class="sp-header">
+        <div class="sp-icon" style="background:rgba(167,139,250,0.2);color:var(--purple);font-size:18px;">${p.badgeIcon}</div>
+        <div><div class="sp-title">${p.author} hat einen Badge freigeschaltet</div><div class="sp-subtitle">${p.time} · ${p.body}</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);">
+        <div class="activity-avatar" style="background:${p.ab};color:${p.ac};width:36px;height:36px;font-size:12px;">${p.initials}</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:500;">${p.badge}</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:1px;">${p.body}</div>
+        </div>
+        <button class="btn btn-sm">👏 Gratulieren</button>
+      </div>
+    </div>`;
+  }
+
+  function renderCompare(){
+    return `<div class="system-post compare">
+      <div class="sp-header">
+        <div class="sp-icon" style="background:var(--info-soft);color:var(--info);">⚖</div>
+        <div><div class="sp-title">Du vs. deine Peer-Group</div><div class="sp-subtitle">472 Tier-2 Swing-Trader · 90 Tage</div></div>
+      </div>
+      <div class="sp-compare-row">
+        <div class="sp-compare-cell you">
+          <div class="sp-cc-name">Du</div>
+          <div class="sp-cc-val pos">+11.4%</div>
+          <div class="sp-cc-meta">Sharpe 1.78 · DD −9.7%</div>
+        </div>
+        <div class="sp-compare-cell">
+          <div class="sp-cc-name">Peer-Median</div>
+          <div class="sp-cc-val">+6.8%</div>
+          <div class="sp-cc-meta">Sharpe 1.21 · DD −12.4%</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);line-height:1.55;padding:8px 10px;background:var(--surface);border-radius:6px;">
+        Du bist <strong style="color:var(--text);">+4.6 Punkte über dem Median</strong> deiner Klasse. Was dich aktuell hochzieht: niedrigerer Drawdown bei vergleichbarer Rendite. Halt das durch — das ist der Moat.
+      </div>
+    </div>`;
+  }
+
+  function renderFeed(){
+    const f=state.feedFilter;
+    const fp=posts.filter(p=>p.tags.includes(f));
+    if(fp.length===0){$('#feed-posts').innerHTML='<div class="card" style="text-align:center;padding:40px 20px;color:var(--text-muted);font-size:13px;">Keine Posts in diesem Filter. Folge mehr Tradern oder probier einen anderen Filter.</div>';return;}
+    $('#feed-posts').innerHTML=fp.map(p=>{
+      if(p.type==='recap')return renderRecap();
+      if(p.type==='achievement')return renderAchievement(p);
+      if(p.type==='compare')return renderCompare();
+      return renderActivity(p);
+    }).join('');
+    $$('.feed-filter').forEach(b=>b.classList.toggle('active',b.dataset.feed===state.feedFilter));
+  }
+
+  // ===== DISCOVER =====
+  const tdrs=[
+    {id:'sara',cat:'swing',initials:'SW',name:'Sara W.',bio:'Biotech-Swings · DEGIRO · Tier 1',ab:'rgba(248,113,113,0.2)',ac:'var(--neg)',ytd:47.3,sharpe:2.10,dd:-12,c:78,tags:['Swing','Biotech','Konzentriert']},
+    {id:'marcus',cat:'fx',initials:'MT',name:'Marcus T.',bio:'FX Macro · IBKR · Tier 3',ab:'rgba(52,211,153,0.2)',ac:'var(--pos)',ytd:22.8,sharpe:2.30,dd:-6,c:92,tags:['FX','Macro','Low DD']},
+    {id:'lukas',cat:'swing',initials:'LK',name:'Lukas K.',bio:'Tech-Swings · IBKR · Tier 2',ab:'rgba(96,165,250,0.2)',ac:'var(--info)',ytd:34.2,sharpe:1.78,dd:-10,c:87,tags:['Swing','Tech','DACH']},
+    {id:'anna',cat:'long',initials:'AB',name:'Anna B.',bio:'Long-Term Value · TR · Tier 2',ab:'rgba(167,139,250,0.2)',ac:'var(--purple)',ytd:18.4,sharpe:1.95,dd:-3,c:95,tags:['Long-Term','Value','Low Turnover']},
+    {id:'jonas',cat:'options',initials:'JP',name:'Jonas P.',bio:'Optionen-Income · Tastytrade · Tier 2',ab:'rgba(212,163,115,0.2)',ac:'var(--accent)',ytd:28.6,sharpe:1.62,dd:-8,c:88,tags:['Options','Income','Theta']},
+    {id:'kira',cat:'crypto',initials:'KH',name:'Kira H.',bio:'Krypto-Swings · Kraken · Tier 1',ab:'rgba(244,192,209,0.2)',ac:'#f472b6',ytd:71.5,sharpe:1.18,dd:-22,c:64,tags:['Krypto','Hohe Vol']},
+    {id:'robin',cat:'day',initials:'RD',name:'Robin D.',bio:'Futures Day · IBKR · Tier 4',ab:'rgba(52,211,153,0.2)',ac:'var(--pos)',ytd:38.7,sharpe:2.84,dd:-4,c:91,tags:['Day','Futures','ES/NQ']},
+    {id:'daniel',cat:'long',initials:'DV',name:'Daniel V.',bio:'Quality Compounders · TR · Tier 3',ab:'rgba(96,165,250,0.2)',ac:'var(--info)',ytd:14.8,sharpe:2.05,dd:-2,c:96,tags:['Long-Term','Quality','Buy-Hold']},
+    {id:'frauf',cat:'vorsorge',initials:'FF',name:'Frau Finanzen',bio:'Vorsorge-Sparpläne · Scalable · Tier 2',ab:'rgba(212,163,115,0.2)',ac:'var(--accent)',ytd:12.4,sharpe:1.82,dd:-3,c:98,tags:['Vorsorge','ETF','AVD']},
+    {id:'tobi',cat:'vorsorge',initials:'TM',name:'Tobias M.',bio:'AVD-Pionier · Comdirect · Tier 1',ab:'rgba(96,165,250,0.2)',ac:'var(--info)',ytd:9.6,sharpe:1.74,dd:-2,c:97,tags:['Vorsorge','AVD','Family']}
+  ];
+
+  function renderDiscover(){
+    const f=state.discoverFilter;
+    let fl=f==='all'?tdrs:tdrs.filter(t=>t.cat===f);
+    const sf={sharpe:(a,b)=>b.sharpe-a.sharpe,ytd:(a,b)=>b.ytd-a.ytd,dd:(a,b)=>b.dd-a.dd,consistency:(a,b)=>b.c-a.c,newest:(a,b)=>0.5-Math.random()};
+    fl=[...fl].sort(sf[state.sortBy]||sf.sharpe);
+    $('#discover-grid').innerHTML=fl.length?fl.map(t=>{
+      const fw=state.follows[t.id];
+      return `<div class="trader-card"><div class="trader-header"><div class="avatar-md" style="background:${t.ab};color:${t.ac};">${t.initials}</div><div class="trader-info"><div class="trader-name">${t.name} <svg width="11" height="11" viewBox="0 0 16 16" fill="var(--pos)"><path d="M14.207 4.793a1 1 0 0 1 0 1.414l-7 7a1 1 0 0 1-1.414 0l-3-3a1 1 0 1 1 1.414-1.414L6.5 11.086l6.293-6.293a1 1 0 0 1 1.414 0z"/></svg></div><div class="trader-bio">${t.bio}</div></div><button class="btn btn-sm ${fw?'btn-primary following':''}" data-follow="${t.id}">${fw?'✓ Folgst':'+ Folgen'}</button></div><div class="trader-stats"><div class="stat-mini"><div class="stat-mini-label">YTD</div><div class="stat-mini-value pos">+${t.ytd.toFixed(1)}%</div></div><div class="stat-mini"><div class="stat-mini-label">Sharpe</div><div class="stat-mini-value">${t.sharpe.toFixed(2)}</div></div><div class="stat-mini"><div class="stat-mini-label">DD</div><div class="stat-mini-value neg">${t.dd}%</div></div></div><div class="trader-tags">${t.tags.map(tg=>`<span class="trader-tag">${tg}</span>`).join('')}</div></div>`;
+    }).join(''):'<div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-muted);font-size:13px;">Keine Trader in dieser Kategorie.</div>';
+    $$('[data-filter]').forEach(c=>c.classList.toggle('active',c.dataset.filter===f));
+    $$('.sort-option').forEach(o=>o.classList.toggle('active',o.dataset.sort===state.sortBy));
+    const sl={sharpe:'Risiko-adj. Rendite',ytd:'YTD Rendite',dd:'Niedrigster Drawdown',consistency:'Konsistenz',newest:'Neueste'};
+    $('#sort-current').textContent=sl[state.sortBy]||'Risiko-adj. Rendite';
+  }
+
+  // ===== CALCULATOR =====
+  function calc(){
+    const age=+$('#calc-age').value,extra=+$('#calc-extra').value,rate=+$('#calc-rate').value/100,target=+$('#calc-target').value;
+    $('#calc-age-val').textContent=age+' Jahre';
+    $('#calc-extra-val').textContent=extra+' €';
+    $('#calc-rate-val').textContent=(rate*100).toFixed(1)+'%';
+    const tl={'18':'18 Jahre (Auszahlung)','25':'25 Jahre','40':'40 Jahre','67':'Renteneintritt (67)'};
+    $('#calc-target-val').textContent=tl[target];
+    let v=0,sc=0,oc=0;
+    const series=[];
+    for(let y=age;y<target;y++){
+      const stateMonthly=(y<18)?10:0;
+      const ownMonthly=extra;
+      const yearAdd=(stateMonthly+ownMonthly)*12;
+      sc+=stateMonthly*12;
+      oc+=ownMonthly*12;
+      v=(v+yearAdd)*(1+rate);
+      series.push(v);
+    }
+    const yld=v-sc-oc;
+    $('#calc-result').textContent='~'+Math.round(v).toLocaleString('de-DE')+' €';
+    const tll={'18':'Geschätztes Vermögen mit 18','25':'Geschätztes Vermögen mit 25','40':'Geschätztes Vermögen mit 40','67':'Geschätztes Vermögen mit 67'};
+    $('#calc-result-label').textContent=tll[target]||'Geschätztes Vermögen';
+    $('#cb-state').textContent=Math.round(sc).toLocaleString('de-DE')+' €';
+    $('#cb-own').textContent=Math.round(oc).toLocaleString('de-DE')+' €';
+    $('#cb-yield').textContent='+'+Math.round(yld).toLocaleString('de-DE')+' €';
+    $('#cb-years').textContent=(target-age)+' Jahre';
+    if(series.length>1){
+      const max=Math.max(...series),w=300,h=80;
+      const pts=series.map((s,i)=>({x:i/(series.length-1)*w,y:h-(s/max)*(h-10)-2}));
+      const path=pts.map((p,i)=>(i===0?'M':'L')+p.x.toFixed(1)+' '+p.y.toFixed(1)).join(' ');
+      $('#calc-path').setAttribute('d',path);
+      $('#calc-path-fill').setAttribute('d',path+` L ${pts[pts.length-1].x.toFixed(1)} ${h} L ${pts[0].x.toFixed(1)} ${h} Z`);
+    }
+  }
+
+  // ===== PRICING =====
+  function setBilling(p){
+    state.billingPeriod=p;save();
+    $$('.billing-btn').forEach(b=>b.classList.toggle('active',b.dataset.billing===p));
+    $$('.pc-amount').forEach(a=>{const v=p==='month'?a.dataset.priceMonth:a.dataset.priceYear;if(v)a.textContent=v.replace('.',',');});
+    $$('.pc-billed').forEach(b=>{const v=p==='month'?b.dataset.billedMonth:b.dataset.billedYear;if(v)b.textContent=v;});
+  }
+
+  // ===== ONBOARDING =====
+  function setStep(n){
+    state.onboardStep=n;save();
+    $$('.modal-step').forEach(s=>s.classList.toggle('active',+s.dataset.step===n));
+    $$('.step-dot').forEach(d=>{const sd=+d.dataset.stepDot;d.classList.toggle('active',sd===n);d.classList.toggle('complete',sd<n);});
+  }
+  function openModal(){$('#onboarding-modal').classList.add('visible');document.body.classList.add('modal-open');setStep(state.onboardStep||1);}
+  function closeModal(){$('#onboarding-modal').classList.remove('visible');document.body.classList.remove('modal-open');}
+
+  // ===== SEARCH =====
+  const searchData=[
+    ...tdrs.map(t=>({type:'trader',id:t.id,name:t.name,meta:t.bio,initials:t.initials,ab:t.ab,ac:t.ac})),
+    {type:'ticker',name:'NVDA',meta:'NVIDIA Corp · Tech',initials:'$'},
+    {type:'ticker',name:'SAP',meta:'SAP SE · Software',initials:'$'},
+    {type:'ticker',name:'TSLA',meta:'Tesla Inc · Auto',initials:'$'},
+    {type:'ticker',name:'ASML',meta:'ASML Holding · Semis',initials:'$'},
+    {type:'strategy',name:'Pullback Setup',meta:'Strategie · 412 Trades',initials:'PB'},
+    {type:'strategy',name:'Breakout Setup',meta:'Strategie · 287 Trades',initials:'BO'},
+    {type:'strategy',name:'Optionen-Income',meta:'Strategie · Wheel & CSP',initials:'OPT'},
+    {type:'avrg',name:'Altersvorsorgedepot',meta:'AVRG · ab 1.1.2027',initials:'€'},
+    {type:'avrg',name:'Frühstart-Rente',meta:'AVRG · 10€/Mo · Kind',initials:'€'},
+    {type:'avrg',name:'Riester-Wechselrechner',meta:'Vorsorge · Tool',initials:'€'}
+  ];
+
+  function search(q){
+    const sr=$('#search-results');
+    if(!q||q.length<1){sr.classList.remove('visible');return;}
+    const ql=q.toLowerCase();
+    const m=searchData.filter(d=>d.name.toLowerCase().includes(ql)||d.meta.toLowerCase().includes(ql)).slice(0,8);
+    if(m.length===0){sr.innerHTML='<div class="sr-empty">Keine Treffer. Versuch z.B. "Sara", "NVDA", "AVRG"…</div>';sr.classList.add('visible');return;}
+    sr.innerHTML=m.map(r=>`<div class="search-result" data-search-result="${r.type}" data-search-name="${r.name}"><div class="sr-icon" style="${r.ab?`background:${r.ab};color:${r.ac};`:''}">${r.initials}</div><div class="sr-text"><div class="sr-name">${r.name}</div><div class="sr-meta">${r.meta}</div></div></div>`).join('');
+    sr.classList.add('visible');
+  }
+
+  // ===== SKILL LEVEL =====
+  function setSkill(s){
+    state.skillLevel=s;save();
+    document.body.classList.remove('skill-beginner','skill-intermediate','skill-pro');
+    document.body.classList.add('skill-'+s);
+    $$('.skill-opt').forEach(b=>b.classList.toggle('active',b.dataset.skill===s));
+    // If current subtab is now hidden, jump back to overview
+    const activeSt=$('.subtab.active');
+    if(activeSt&&((activeSt.classList.contains('intermediate-plus')&&s==='beginner')||(activeSt.classList.contains('pro-only')&&s!=='pro'))){
+      $$('.subtab').forEach(x=>x.classList.toggle('active',x.dataset.subtab==='overview'));
+      $$('.subview').forEach(x=>x.classList.toggle('active',x.id==='sub-overview'));
+    }
+    const labels={beginner:'Beginner-Modus · nur Basics',intermediate:'Intermediate · Setup-Tags & R-Multiples',pro:'Pro · alle Analytics aktiv'};
+    toast(labels[s]);
+  }
+  $$('.skill-opt').forEach(b=>b.addEventListener('click',()=>setSkill(b.dataset.skill)));
+
+  // ===== VIEW SWITCHING =====
+  const views=['profile','feed','discover','vorsorge','pricing'];
+  function showView(v){
+    views.forEach(x=>{const el=$('#view-'+x);if(el)el.classList.toggle('active',x===v);});
+    $$('.nav-link').forEach(n=>n.classList.toggle('active',n.dataset.view===v));
+    $$('.mnav-btn').forEach(n=>n.classList.toggle('active',n.dataset.view===v));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  // ===== EVENTS =====
+
+  // Nav
+  $$('.nav-link').forEach(l=>l.addEventListener('click',()=>showView(l.dataset.view)));
+  $$('.mnav-btn').forEach(l=>l.addEventListener('click',()=>showView(l.dataset.view)));
+  $$('[data-view]:not(.nav-link):not(.mnav-btn):not(.logo)').forEach(l=>l.addEventListener('click',e=>{e.stopPropagation();showView(l.dataset.view);}));
+  $('.logo').addEventListener('click',()=>showView('profile'));
+
+  // Range
+  $$('.range-btn').forEach(b=>b.addEventListener('click',()=>setRange(b.dataset.range)));
+
+  // Bench dropdown
+  $('#bench-select-trigger').addEventListener('click',e=>{e.stopPropagation();$('#bench-dropdown').classList.toggle('visible');});
+  $$('.bench-option').forEach(o=>o.addEventListener('click',e=>{e.stopPropagation();state.benchmark=o.dataset.bench;save();$$('.bench-option').forEach(x=>x.classList.toggle('active',x===o));$('#bench-dropdown').classList.remove('visible');setRange(state.range);}));
+
+  // Subtabs
+  $$('.subtab').forEach(s=>s.addEventListener('click',()=>{const t=s.dataset.subtab;$$('.subtab').forEach(x=>x.classList.toggle('active',x.dataset.subtab===t));$$('.subview').forEach(x=>x.classList.toggle('active',x.id==='sub-'+t));}));
+  $$('[data-subtab-jump]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const t=b.dataset.subtabJump;$$('.subtab').forEach(x=>x.classList.toggle('active',x.dataset.subtab===t));$$('.subview').forEach(x=>x.classList.toggle('active',x.id==='sub-'+t));}));
+
+  // Trades
+  $$('.trade').forEach(r=>{const m=r.querySelector('.trade-main');if(m)m.addEventListener('click',()=>r.classList.toggle('open'));});
+  $$('[data-trade-filter]').forEach(c=>c.addEventListener('click',()=>{state.tradeFilter=c.dataset.tradeFilter;save();renderTrades();}));
+  $$('#trades-table th[data-sort]').forEach(th=>th.addEventListener('click',()=>{const c=th.dataset.sort;if(state.tradeSort.col===c)state.tradeSort.asc=!state.tradeSort.asc;else{state.tradeSort.col=c;state.tradeSort.asc=false;}save();renderTrades();}));
+
+  // Follow main
+  const fb=$('#follow-btn');
+  if(fb){
+    if(state.follows.lukas){fb.classList.add('following');fb.textContent='✓ Folgst';}
+    fb.addEventListener('click',()=>{state.follows.lukas=!state.follows.lukas;save();fb.classList.toggle('following');fb.textContent=state.follows.lukas?'✓ Folgst':'+ Folgen';toast(state.follows.lukas?'Du folgst jetzt Lukas K.':'Folge entfernt');});
+  }
+
+  // Delegated follows
+  document.addEventListener('click',e=>{
+    const f=e.target.closest('[data-follow]');
+    if(f){const id=f.dataset.follow;state.follows[id]=!state.follows[id];save();renderDiscover();toast(state.follows[id]?'Du folgst jetzt diesem Trader':'Folge entfernt');return;}
+    const fs=e.target.closest('.follow-suggested');
+    if(fs){const isF=fs.classList.toggle('following');fs.textContent=isF?'✓ Folgst':'Folgen';if(isF)fs.classList.add('btn-primary');else fs.classList.remove('btn-primary');toast('Folge-Status aktualisiert');return;}
+  });
+
+  // Filters discover
+  $$('[data-filter]').forEach(c=>c.addEventListener('click',()=>{state.discoverFilter=c.dataset.filter;save();renderDiscover();}));
+
+  // Sort
+  $('#sort-trigger').addEventListener('click',e=>{e.stopPropagation();$('#sort-dropdown').classList.toggle('visible');});
+  $$('.sort-option').forEach(o=>o.addEventListener('click',e=>{e.stopPropagation();state.sortBy=o.dataset.sort;save();$('#sort-dropdown').classList.remove('visible');renderDiscover();}));
+
+  // Feed filters
+  $$('.feed-filter').forEach(f=>f.addEventListener('click',()=>{state.feedFilter=f.dataset.feed;save();renderFeed();}));
+
+  // Feed actions
+  $('#view-feed').addEventListener('click',e=>{
+    const btn=e.target.closest('[data-action]');
+    if(!btn||!btn.dataset.post)return;
+    const a=btn.dataset.action,id=btn.dataset.post;
+    if(a==='like'){
+      const p=posts.find(x=>x.id===id);
+      if(!p)return;
+      const wasLiked=!!state.likes[id];
+      state.likes[id]=!wasLiked;
+      const base=p.kudos||0;
+      state.likeCounts[id]=base+(state.likes[id]?1:0);
+      save();renderFeed();
+      if(state.likes[id])toast('👏 Kudos gegeben');
+    }else if(a==='bookmark'){
+      state.bookmarks[id]=!state.bookmarks[id];save();renderFeed();
+      toast(state.bookmarks[id]?'Gespeichert in Lesezeichen':'Lesezeichen entfernt');
+    }else if(a==='share'){toast('Link kopiert (simuliert)');
+    }else if(a==='comment-toggle'){const c=$(`[data-comments="${id}"]`);if(c)c.classList.toggle('open');
+    }else if(a==='submit-comment'){
+      const inp=$(`[data-comment-input="${id}"]`);
+      if(!inp)return;
+      const txt=inp.value.trim();if(!txt)return;
+      if(!state.comments[id])state.comments[id]=[];
+      state.comments[id].push({text:': '+txt,time:'gerade eben'});
+      save();renderFeed();const c=$(`[data-comments="${id}"]`);if(c)c.classList.add('open');
+    }
+  });
+
+  // Trending
+  $$('.trending-item').forEach(t=>t.addEventListener('click',()=>{toast('Strategy-Filter aktiviert (simuliert)');showView('discover');}));
+
+  // Tags
+  $$('.tag').forEach(t=>t.addEventListener('click',()=>{showView('discover');toast('Discover gefiltert: '+t.textContent.trim());}));
+
+  // Theme
+  $('#theme-toggle').addEventListener('click',()=>{
+    const cur=document.documentElement.getAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme',cur==='dark'?'light':'dark');
+  });
+
+  // Notif
+  $('#notif-btn').addEventListener('click',e=>{e.stopPropagation();$('#notif-dropdown').classList.toggle('visible');const dot=$('#notif-dot');if(dot)dot.style.display='none';});
+
+  // Verified tooltip
+  const vt=$('#verified-trigger'),vtt=$('#verified-tooltip');
+  if(vt&&vtt){
+    vt.addEventListener('mouseenter',e=>{const r=e.target.getBoundingClientRect();vtt.style.top=(window.scrollY+r.bottom+6)+'px';vtt.style.left=r.left+'px';vtt.classList.add('visible');});
+    vt.addEventListener('mouseleave',()=>vtt.classList.remove('visible'));
+  }
+
+  // Chart hover
+  const ca=$('#chart-area'),tt=$('#chart-tooltip'),cs=$('#chart-cursor'),hr=$('#chart-hover');
+  if(hr){
+    hr.addEventListener('mousemove',e=>{
+      if(!cur)return;
+      const r=ca.getBoundingClientRect(),x=e.clientX-r.left,sx=(x/r.width)*800;
+      let cl=cur.u[0],cb=cur.b[0],md=Infinity;
+      cur.u.forEach((p,i)=>{const d=Math.abs(p.x-sx);if(d<md){md=d;cl=p;cb=cur.b[i];}});
+      cs.setAttribute('x1',cl.x);cs.setAttribute('x2',cl.x);cs.setAttribute('opacity','0.5');
+      tt.style.left=((cl.x/800)*r.width)+'px';tt.style.top=((cl.y/220)*r.height)+'px';
+      $('#tt-date').textContent=cl.date;
+      $('#tt-user').textContent='Lukas K. '+fmt(cl.value);
+      $('#tt-bench').textContent=state.benchmark+' '+fmt(cb.value);
+      tt.classList.add('visible');
+    });
+    hr.addEventListener('mouseleave',()=>{tt.classList.remove('visible');cs.setAttribute('opacity','0');});
+  }
+
+  // Search
+  let shi=-1;
+  $('#search-input').addEventListener('input',e=>{search(e.target.value);shi=-1;});
+  $('#search-input').addEventListener('focus',e=>{if(e.target.value)search(e.target.value);});
+  $('#search-input').addEventListener('keydown',e=>{
+    const items=$$('.search-result');
+    if(e.key==='ArrowDown'){e.preventDefault();shi=Math.min(shi+1,items.length-1);items.forEach((x,i)=>x.classList.toggle('highlighted',i===shi));}
+    else if(e.key==='ArrowUp'){e.preventDefault();shi=Math.max(shi-1,0);items.forEach((x,i)=>x.classList.toggle('highlighted',i===shi));}
+    else if(e.key==='Enter'&&shi>=0){items[shi].click();}
+    else if(e.key==='Escape'){$('#search-results').classList.remove('visible');e.target.blur();}
+  });
+  $('#search-results').addEventListener('click',e=>{
+    const r=e.target.closest('[data-search-result]');if(!r)return;
+    const t=r.dataset.searchResult,n=r.dataset.searchName;
+    $('#search-input').value='';
+    $('#search-results').classList.remove('visible');
+    if(t==='trader')showView('discover');
+    else if(t==='avrg')showView('vorsorge');
+    else if(t==='strategy')showView('discover');
+    toast('Gehe zu: '+n);
+  });
+  document.addEventListener('keydown',e=>{
+    if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();$('#search-input').focus();}
+  });
+
+  // Click outside
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('.search-box'))$('#search-results').classList.remove('visible');
+    if(!e.target.closest('#notif-btn')&&!e.target.closest('#notif-dropdown'))$('#notif-dropdown').classList.remove('visible');
+    if(!e.target.closest('.bench-select'))$('#bench-dropdown').classList.remove('visible');
+    if(!e.target.closest('.sort-select-wrap'))$('#sort-dropdown').classList.remove('visible');
+  });
+
+  // Vorsorge cards
+  $$('.vorsorge-card').forEach(c=>c.addEventListener('click',()=>{
+    const card=c.dataset.card;
+    if(card==='avd')toast('Altersvorsorgedepot · Erklärseite öffnet sich');
+    else if(card==='fruehstart')toast('Frühstart-Rente · So funktioniert\'s für deine Familie');
+    else if(card==='riester')toast('Riester-Check · Lohnt sich der Wechsel?');
+  }));
+
+  // Calculator
+  ['#calc-age','#calc-extra','#calc-rate','#calc-target'].forEach(id=>{const el=$(id);if(el)el.addEventListener('input',calc);});
+
+  // FAQ
+  $$('.faq-item').forEach(f=>f.addEventListener('click',()=>f.classList.toggle('open')));
+
+  // Billing
+  $$('.billing-btn').forEach(b=>b.addEventListener('click',()=>setBilling(b.dataset.billing)));
+
+  // Pricing CTAs
+  $$('[data-action="upgrade-plus"], [data-action="upgrade-pro"]').forEach(b=>b.addEventListener('click',e=>{
+    const a=e.currentTarget.dataset.action;
+    state.plan=a==='upgrade-plus'?'plus':'pro';save();
+    toast(`Du hast ${state.plan==='plus'?'Plus':'Pro'} aktiviert (simuliert) — 14 Tage gratis`);
+  }));
+
+  // Onboarding
+  $$('[data-action="open-onboarding"]').forEach(b=>b.addEventListener('click',openModal));
+  $$('[data-action="close-onboarding"]').forEach(b=>b.addEventListener('click',closeModal));
+  $('#onboarding-modal').addEventListener('click',e=>{if(e.target.id==='onboarding-modal')closeModal();});
+
+  $$('[data-action="next-step"]').forEach(b=>b.addEventListener('click',()=>{
+    const cs=state.onboardStep||1;
+    if(cs===2&&!state.selectedBroker){toast('Wähle einen Broker');return;}
+    if(cs===3&&state.selectedStrategies.length===0){toast('Wähle mindestens eine Strategie');return;}
+    setStep(Math.min(cs+1,4));
+  }));
+  $$('[data-action="prev-step"]').forEach(b=>b.addEventListener('click',()=>setStep(Math.max((state.onboardStep||1)-1,1))));
+
+  $$('.broker-card').forEach(c=>c.addEventListener('click',()=>{
+    state.selectedBroker=c.dataset.broker;save();
+    $$('.broker-card').forEach(x=>x.classList.toggle('selected',x===c));
+    $('#step2-next').disabled=false;
+  }));
+
+  $$('.strategy-card').forEach(c=>c.addEventListener('click',()=>{
+    const s=c.dataset.strategy;
+    const idx=state.selectedStrategies.indexOf(s);
+    if(idx>=0)state.selectedStrategies.splice(idx,1);
+    else state.selectedStrategies.push(s);
+    save();
+    c.classList.toggle('selected');
+    $('#step3-next').disabled=state.selectedStrategies.length===0;
+  }));
+
+  $$('[data-action="finish-onboarding"]').forEach(b=>b.addEventListener('click',()=>{
+    state.onboarded=true;state.plan='free';state.onboardStep=1;save();
+    closeModal();toast('Willkommen bei STrade! Free-Plan aktiv.');
+  }));
+  $$('[data-action="finish-onboarding-plus"]').forEach(b=>b.addEventListener('click',()=>{
+    state.onboarded=true;state.plan='plus';state.onboardStep=1;save();
+    closeModal();toast('14 Tage Plus aktiv — viel Spaß!');
+  }));
+
+  // ===== INITIAL RENDER =====
+  // Apply skill level body class
+  document.body.classList.add('skill-'+(state.skillLevel||'intermediate'));
+  $$('.skill-opt').forEach(b=>b.classList.toggle('active',b.dataset.skill===(state.skillLevel||'intermediate')));
+
+  if(state.selectedBroker){const c=$(`[data-broker="${state.selectedBroker}"]`);if(c){c.classList.add('selected');const sn=$('#step2-next');if(sn)sn.disabled=false;}}
+  state.selectedStrategies.forEach(s=>{const c=$(`[data-strategy="${s}"]`);if(c)c.classList.add('selected');});
+  if(state.selectedStrategies.length>0){const sn=$('#step3-next');if(sn)sn.disabled=false;}
+  $$('.bench-option').forEach(o=>o.classList.toggle('active',o.dataset.bench===state.benchmark));
+
+  setRange(state.range||'YTD');
+  renderTrades();
+  renderFeed();
+  renderDiscover();
+  calc();
+  setBilling(state.billingPeriod||'month');
+
+})();
+
+// Service Worker Registration for PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
+  });
+}
+</script>
+</body>
+</html>

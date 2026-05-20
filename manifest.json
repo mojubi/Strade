@@ -1,0 +1,33 @@
+{
+  "name": "STrade — Trade fair. Sieh deinen echten Fortschritt.",
+  "short_name": "STrade",
+  "description": "Verified trading & echter Fortschritt. Performance-Cockpit für TR, Scalable und IBKR.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0d9488",
+  "lang": "de-DE",
+  "categories": ["finance", "social", "productivity"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
